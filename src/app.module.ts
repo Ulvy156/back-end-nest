@@ -10,7 +10,8 @@ import { NotificationsModule } from './notifications/notifications.module';
 import ormconfig from 'ormconfig';
 import { ConfigModule } from '@nestjs/config';
 import { LocationsModule } from './locations/locations.module';
-import { LoanOfficerDashboardModule } from './loan-officer-dashboard/loan-officer-dashboard.module';
+import { BranchReportDashboardModule } from './branch-report-dashboard/branch-report-dashboard.module';
+import { ViewBranchPermissionModule } from './view-branch-permission/view-branch-permission.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { LoanOfficerDashboardModule } from './loan-officer-dashboard/loan-office
     UserModule,
     NotificationsModule,
     LocationsModule,
-    LoanOfficerDashboardModule,
+    BranchReportDashboardModule,
+    ViewBranchPermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
