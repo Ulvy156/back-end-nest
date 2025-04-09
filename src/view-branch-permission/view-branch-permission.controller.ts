@@ -7,7 +7,7 @@ export class ViewBranchPermissionController {
     private readonly viewBranchPermissionService: ViewBranchPermissionService,
   ) {}
 
-  @Get()
+  @Get('/:iuser_id')
   async viewBranchesPermissionByIuserID(
     @Param('iuser_id') iuser_id: number,
   ): Promise<Array<number>> {

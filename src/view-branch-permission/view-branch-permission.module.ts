@@ -5,5 +5,6 @@ import { ViewBranchPermissionController } from './view-branch-permission.control
 @Module({
   controllers: [ViewBranchPermissionController],
   providers: [ViewBranchPermissionService],
+  exports: [ViewBranchPermissionService],
 })
 export class ViewBranchPermissionModule {}
