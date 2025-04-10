@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoanDelinquencyModule } from './loan-delinquency/loan-delinquency.module';
 import { CmlUserModule } from './cml-user/cml-user.module';
-import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import ormconfig from 'ormconfig';
@@ -20,7 +19,6 @@ import { ContactAccountModule } from './contact-account/contact-account.module';
     TypeOrmModule.forRoot(ormconfig),
     LoanDelinquencyModule,
     CmlUserModule,
-    AuthModule,
     UserModule,
     NotificationsModule,
     LocationsModule,
