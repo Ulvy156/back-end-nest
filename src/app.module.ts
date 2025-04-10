@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LocationsModule } from './locations/locations.module';
 import { BranchReportDashboardModule } from './branch-report-dashboard/branch-report-dashboard.module';
 import { ViewBranchPermissionModule } from './view-branch-permission/view-branch-permission.module';
+import { ContactAccountModule } from './contact-account/contact-account.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ViewBranchPermissionModule } from './view-branch-permission/view-branch
     LocationsModule,
     BranchReportDashboardModule,
     ViewBranchPermissionModule,
+    ContactAccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
