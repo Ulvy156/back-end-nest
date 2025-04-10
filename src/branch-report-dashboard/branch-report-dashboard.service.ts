@@ -1,19 +1,27 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { ViewBranchPermissionService } from 'src/view-branch-permission/view-branch-permission.service';
 import { DataSource } from 'typeorm';
+import { CollectedAccFilter } from './branch-report-dashboard.interface';
 
 @Injectable()
 export class BranchReportDashboardService {
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
+    private readonly viewBranchPermission: ViewBranchPermissionService,
   ) {}
-  async getReportBranchDashboard(iuser_id: number): Promise<any> {
+  async getColltectedAccBranch(filterData: CollectedAccFilter): Promise<any> {
     try {
-      const sql = `   
+      const branchesIds =
+        await this.viewBranchPermission.viewBranchesPermissionByIuserID(
+          filterData.iuser_id,
+        );
+      let sql = `   
             SELECT 
               L.iuser_id,
               U.NAME,
+              U.ROLE_ID,
 
               -- Previous month data
               SUM(CASE WHEN dbo.fn_IsDayInRange(L.Par_Category, 0, 0, 0, L.created_at) IS NOT NULL THEN 1 ELSE 0 END) AS pre_par_0_day,
@@ -29,9 +37,30 @@ export class BranchReportDashboardService {
 
             FROM CMLDLQ_loan_overdue L
             INNER JOIN USER_PROFILE_MST U ON U.IUSER_ID = L.iuser_id
-            WHERE U.IUSER_ID = ${iuser_id}
-            ORDER BY u.NAME
+            WHERE L.branchID IN (${branchesIds.join(',')})
         `;
+      // filter base on filterType
+      if (filterData.filterType === 'ALL_LO') {
+        sql += `
+          AND U.ROLE_ID = 20
+        `;
+      } else if (filterData.filterType === 'ALL_LRO') {
+        sql += `
+          AND U.ROLE_ID = 32
+        `;
+      } else if (filterData.filterType === 'LO_NAME') {
+        sql += `
+          AND LOWER(U.NAME) LIKE '%${filterData.inputValue?.toLowerCase()}%' AND U.ROLE_ID = 20
+        `;
+      } else if (filterData.filterType === 'LRO_NAME') {
+        sql += `
+          AND LOWER(U.NAME) LIKE '%${filterData.inputValue?.toLowerCase()}%' AND U.ROLE_ID = 32
+        `;
+      }
+      sql += `
+            GROUP BY L.iuser_id, U.NAME, U.ROLE_ID
+            ORDER BY U.NAME
+      `;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
