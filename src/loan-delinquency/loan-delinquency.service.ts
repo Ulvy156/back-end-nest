@@ -240,18 +240,20 @@ export class LoanDelinquencyService {
         query += ` WHERE ` + conditions.join(' AND ');
       }
       query += ` ORDER BY U.IUSER_ID DESC `;
+      //execute query
       const totalAccounts: [] = await this.dataSource.query(query);
       // != 1 is meant user want to export all data
       if (req.is_export != 1) {
         query += ` OFFSET (${parseInt(req.page.toString())} - 1) * 100 ROWS FETCH NEXT 100 ROWS ONLY`;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const res = await this.dataSource.query(query);
+      const res: Array<Record<string, any>> =
+        await this.dataSource.query(query);
+      //get last page for pagination
       const lastPage = Math.ceil(totalAccounts.length / 100);
 
       return {
         success: true,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         data: res,
         total: totalAccounts.length,
         lastPage: lastPage,

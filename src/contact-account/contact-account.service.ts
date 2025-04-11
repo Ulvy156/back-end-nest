@@ -1,26 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { CreateContactAccountDto } from './dto/create-contact-account.dto';
-import { UpdateContactAccountDto } from './dto/update-contact-account.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 
 @Injectable()
 export class ContactAccountService {
-  create(createContactAccountDto: CreateContactAccountDto) {
-    return 'This action adds a new contactAccount';
-  }
+  constructor(
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
+  ) {}
 
-  findAll() {
-    return `This action returns all contactAccount`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} contactAccount`;
-  }
-
-  update(id: number, updateContactAccountDto: UpdateContactAccountDto) {
-    return `This action updates a #${id} contactAccount`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} contactAccount`;
+  //Number of Contact Accounts (Call+Visit)
+  async getNumberOfContactAcc(filterData: CollectedAccFilter) {
+    try {
+      const sql = `EXEC CMLDLQ_GetContactAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const result: Record<string, any> = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -12,9 +12,19 @@ import { LocationsModule } from './locations/locations.module';
 import { BranchReportDashboardModule } from './branch-report-dashboard/branch-report-dashboard.module';
 import { ViewBranchPermissionModule } from './view-branch-permission/view-branch-permission.module';
 import { ContactAccountModule } from './contact-account/contact-account.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60, // Time to live (seconds)
+          limit: 10, // Max number of requests within ttl
+        },
+      ],
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(ormconfig),
     LoanDelinquencyModule,
@@ -27,6 +37,12 @@ import { ContactAccountModule } from './contact-account/contact-account.module';
     ContactAccountModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

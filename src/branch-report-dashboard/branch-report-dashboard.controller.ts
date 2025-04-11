@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { BranchReportDashboardService } from './branch-report-dashboard.service';
 import { CollectedAccFilter } from './branch-report-dashboard.interface';
 
@@ -8,10 +8,21 @@ export class BranchReportDashboardController {
     private readonly branchReportDashboardService: BranchReportDashboardService,
   ) {}
 
-  @Get()
-  async getReportBranchDashboard(
-    @Body() filterData: CollectedAccFilter,
+  @Get('/collected-account')
+  async getColltectedAccBranch(
+    @Query() filterData: CollectedAccFilter,
   ): Promise<any> {
-    return this.branchReportDashboardService.getColltectedAccBranch(filterData);
+    return await this.branchReportDashboardService.getColltectedAccBranch(
+      filterData,
+    );
+  }
+
+  @Get('/collected-amount')
+  async getColltectedAmtBranch(
+    @Query() filterData: CollectedAccFilter,
+  ): Promise<any> {
+    return await this.branchReportDashboardService.getColltectedAmtBranch(
+      filterData,
+    );
   }
 }
