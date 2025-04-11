@@ -197,20 +197,20 @@ export class LoanDelinquencyService {
   async geVillageUnderROManage(req: FilterVillageManagement): Promise<any> {
     try {
       let query = `
-        SELECT 
-            (SELECT TOP 1 PL.DESCRIPTION 
-            FROM PICK_LIST_DTL PL 
-            WHERE PL.REC_TYP = 7013 
+        SELECT
+            (SELECT TOP 1 PL.DESCRIPTION
+            FROM PICK_LIST_DTL PL
+            WHERE PL.REC_TYP = 7013
             AND LEFT(R.village_code, 2) = LEFT(PL.REF_CODE, 2)) AS province_name,
 
-            (SELECT TOP 1 PL.DESCRIPTION 
-            FROM PICK_LIST_DTL PL 
-            WHERE PL.REC_TYP = 7014 
+            (SELECT TOP 1 PL.DESCRIPTION
+            FROM PICK_LIST_DTL PL
+            WHERE PL.REC_TYP = 7014
             AND LEFT(R.village_code, 4) = LEFT(PL.REF_CODE, 4)) AS district_name,
 
-            (SELECT TOP 1 PL.DESCRIPTION 
-            FROM PICK_LIST_DTL PL 
-            WHERE PL.REC_TYP = 7015 
+            (SELECT TOP 1 PL.DESCRIPTION
+            FROM PICK_LIST_DTL PL
+            WHERE PL.REC_TYP = 7015
             AND LEFT(R.village_code, 6) = LEFT(PL.REF_CODE, 6)) AS commune_name,
 
             P.DESCRIPTION AS village_name,
@@ -260,4 +260,25 @@ export class LoanDelinquencyService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+  // async geVillageUnderROManage(req: FilterVillageManagement): Promise<any> {
+  //   try {
+  //     // EXEC GetVillageDetails  @br_id, @iuser_id, @is_export, @page;
+  //     const query = `EXEC GetVillageDetails ${req.br_id ?? null}, ${req.iuser_id ?? null}, ${req.is_export}, ${req.page}`;
+  //     const totalAccounts: [] = await this.dataSource.query(query);
+
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //     const res = await this.dataSource.query(query);
+  //     const lastPage = Math.ceil(totalAccounts.length / 100);
+
+  //     return {
+  //       success: true,
+  //       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //       data: res,
+  //       total: totalAccounts.length,
+  //       lastPage: lastPage,
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(error, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
 }
