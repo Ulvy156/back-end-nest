@@ -253,7 +253,6 @@ export class LoanDelinquencyService {
 
       return {
         success: true,
-
         data: res,
         total: totalAccounts.length,
         lastPage: lastPage,
@@ -262,25 +261,4 @@ export class LoanDelinquencyService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
-  // async geVillageUnderROManage(req: FilterVillageManagement): Promise<any> {
-  //   try {
-  //     // EXEC GetVillageDetails  @br_id, @iuser_id, @is_export, @page;
-  //     const query = `EXEC GetVillageDetails ${req.br_id ?? null}, ${req.iuser_id ?? null}, ${req.is_export}, ${req.page}`;
-  //     const totalAccounts: [] = await this.dataSource.query(query);
-
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  //     const res = await this.dataSource.query(query);
-  //     const lastPage = Math.ceil(totalAccounts.length / 100);
-
-  //     return {
-  //       success: true,
-  //       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  //       data: res,
-  //       total: totalAccounts.length,
-  //       lastPage: lastPage,
-  //     };
-  //   } catch (error) {
-  //     throw new HttpException(error, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
 }
