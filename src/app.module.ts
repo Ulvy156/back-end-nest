@@ -14,6 +14,7 @@ import { ViewBranchPermissionModule } from './view-branch-permission/view-branch
 import { ContactAccountModule } from './contact-account/contact-account.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { InteractionSummaryModule } from './interaction-summary/interaction-summary.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { APP_GUARD } from '@nestjs/core';
     BranchReportDashboardModule,
     ViewBranchPermissionModule,
     ContactAccountModule,
+    InteractionSummaryModule,
   ],
   controllers: [AppController],
   providers: [
