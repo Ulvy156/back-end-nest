@@ -223,6 +223,7 @@ export class LoanDelinquencyService {
         LEFT JOIN USER_PROFILE_MST AS U ON R.iuser_id = U.IUSER_ID
         JOIN PICK_LIST_DTL AS P ON R.village_code = P.REF_CODE
         JOIN BRANCH_MST AS B ON B.IBR_ID = U.IBR_ID
+        WHERE U.STATUS <> 'D'
       `;
       // Initialize an array to hold the conditions
       const conditions: Array<string> = [];
@@ -237,7 +238,7 @@ export class LoanDelinquencyService {
 
       // If there are conditions, append them to the query
       if (conditions.length > 0) {
-        query += ` WHERE ` + conditions.join(' AND ');
+        query += ` AND ` + conditions.join(' AND ');
       }
       query += ` ORDER BY U.IUSER_ID DESC `;
       //execute query
