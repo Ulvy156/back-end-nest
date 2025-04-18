@@ -15,4 +15,9 @@ export class ViewBranchPermissionController {
       +iuser_id,
     );
   }
+
+  @Get('/branch-info/:iuser_id')
+  async getBrnachByBrID(@Param('iuser_id') iuser_id: number) {
+    return await this.viewBranchPermissionService.getBrnachByBrID(+iuser_id);
+  }
 }

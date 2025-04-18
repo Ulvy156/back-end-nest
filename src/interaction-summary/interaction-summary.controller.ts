@@ -10,7 +10,6 @@ export class InteractionSummaryController {
 
   @Get('/total-contact-accounts')
   async getNumberOfContactAcc(@Query() filterData: CollectedAccFilter) {
-    console.log('Received query:', filterData);
     return await this.interactionSummaryService.getNumberOfContactAcc(
       filterData,
     );

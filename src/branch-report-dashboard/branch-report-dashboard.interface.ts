@@ -9,4 +9,5 @@ export interface CollectedAccFilter {
   filterType: FilterType;
   inputValue: string;
   iuser_id: number;
+  br_id?: number;
 }

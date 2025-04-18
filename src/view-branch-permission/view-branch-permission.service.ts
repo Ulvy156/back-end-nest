@@ -27,4 +27,22 @@ export class ViewBranchPermissionService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getBrnachByBrID(iuser_id: number) {
+    try {
+      const brIds = await this.viewBranchesPermissionByIuserID(iuser_id);
+      const sql = `
+        SELECT 
+          B.IBR_ID,
+          B.BR_NM,
+          BR_CD
+        FROM BRANCH_MST B
+        WHERE B.IBR_ID IN (${brIds.join(',')})          
+      `;
+      const res: Record<string, any> = await this.dataSource.query(sql);
+      return res;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
