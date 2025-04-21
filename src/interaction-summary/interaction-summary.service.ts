@@ -13,7 +13,10 @@ export class InteractionSummaryService {
   //Number of Contact Accounts (Call+Visit)
   async getNumberOfContactAcc(filterData: CollectedAccFilter) {
     try {
-      const sql = `EXEC CMLDLQ_GetContactToolsAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetContactToolsAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -24,7 +27,10 @@ export class InteractionSummaryService {
   //Number of step takens Accounts
   async getNumberOfStepTakensAcc(filterData: CollectedAccFilter) {
     try {
-      const sql = `EXEC CMLDLQ_GetStepTakensAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetStepTakensAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -35,7 +41,10 @@ export class InteractionSummaryService {
   //Number of step takens Accounts
   async getNumberOfStaffRecommendAcc(filterData: CollectedAccFilter) {
     try {
-      const sql = `EXEC CMLDLQ_GetStaffRecommendAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetStaffRecommendAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {

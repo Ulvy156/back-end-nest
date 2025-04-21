@@ -15,6 +15,7 @@ import { ContactAccountModule } from './contact-account/contact-account.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { InteractionSummaryModule } from './interaction-summary/interaction-summary.module';
+import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-team-dashboard.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { InteractionSummaryModule } from './interaction-summary/interaction-summ
     ViewBranchPermissionModule,
     ContactAccountModule,
     InteractionSummaryModule,
+    RecoveryTeamDashboardModule,
   ],
   controllers: [AppController],
   providers: [

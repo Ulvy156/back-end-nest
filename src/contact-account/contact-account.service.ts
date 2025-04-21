@@ -13,7 +13,9 @@ export class ContactAccountService {
   //Number of Contact Accounts (Call+Visit)
   async getNumberOfContactAcc(filterData: CollectedAccFilter) {
     try {
-      const sql = `EXEC CMLDLQ_GetContactAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      filterData.br_id = filterData.br_id ?? null;
+      filterData.iuser_id = filterData.iuser_id ?? null;
+      const sql = `EXEC CMLDLQ_GetContactAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
