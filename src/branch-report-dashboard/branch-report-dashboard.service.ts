@@ -29,4 +29,59 @@ export class BranchReportDashboardService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  //Number of Contact Accounts (Call+Visit)
+  async getNumberOfContactAcc(filterData: CollectedAccFilter) {
+    try {
+      filterData.br_id = filterData.br_id ?? null;
+      filterData.iuser_id = filterData.iuser_id ?? null;
+      const sql = `EXEC CMLDLQ_GetContactAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const result: Record<string, any> = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  //Contact Tool
+  async getNumberOfContactToolAcc(filterData: CollectedAccFilter) {
+    try {
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetContactToolsAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const result: Record<string, any> = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  //Number of step takens Accounts
+  async getNumberOfStepTakensAcc(filterData: CollectedAccFilter) {
+    try {
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetStepTakensAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const result: Record<string, any> = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  //Number of step takens Accounts
+  async getNumberOfStaffRecommendAcc(filterData: CollectedAccFilter) {
+    try {
+      if (!filterData.br_id) {
+        filterData.br_id = null;
+      }
+      const sql = `EXEC CMLDLQ_GetStaffRecommendAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const result: Record<string, any> = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
