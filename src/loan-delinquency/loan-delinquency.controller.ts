@@ -1,9 +1,10 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LoanDelinquencyService } from './loan-delinquency.service';
 import {
   FilterLoanDetails,
   FilterUploadedLoanQuery,
   FilterVillageManagement,
+  LonaSavedFilterType,
 } from './loan.service.interface';
 
 @Controller('loan-delinquency')
@@ -95,5 +96,19 @@ export class LoanDelinquencyController {
     @Query() query: FilterVillageManagement,
   ): Promise<any> {
     return await this.loanDelinquencyService.geVillageUnderROManage(query);
+  }
+
+  @Get('/follow-up-loan/BM-filter')
+  async filterUploadedLoanByBMID(
+    @Query() lonaSavedFilterType: LonaSavedFilterType,
+  ): Promise<any> {
+    return await this.loanDelinquencyService.filterUploadedLoanByECID(
+      lonaSavedFilterType,
+    );
+  }
+
+  @Get('/follow-up-loan/:accId')
+  async getLoanOverdueFollowup(@Param('accId') accId: string): Promise<any> {
+    return await this.loanDelinquencyService.getLoanOverdueFollowup(accId);
   }
 }

@@ -6,6 +6,7 @@ import {
   FilterLoanDetails,
   FilterUploadedLoanQuery,
   FilterVillageManagement,
+  LonaSavedFilterType,
 } from './loan.service.interface';
 
 @Injectable()
@@ -257,6 +258,86 @@ export class LoanDelinquencyService {
         data: res,
         total: totalAccounts.length,
         lastPage: lastPage,
+      };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getLoanOverdueFollowup(acc_id: string): Promise<any> {
+    try {
+      const sql = `  
+            SELECT TOP 1  * FROM CMLDLQ_loan_overdue L 
+            WHERE  L.acc_id ='${acc_id}'
+            ORDER BY id DESC;`;
+      const res: Record<string, any> = await this.dataSource.query(sql);
+      return res[0];
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async filterUploadedLoanByECID(lonaSavedFilterType: LonaSavedFilterType) {
+    try {
+      let query = `
+          SELECT 
+              loan.*,
+              ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh
+          FROM 
+              CMLDLQ_loan_overdue loan
+          JOIN 
+              CUST_MST cm ON cm.CUST_ID = loan.cus_ID
+          WHERE 
+              loan.branchID IN (
+              SELECT PERMISSION
+                      FROM PERM_DTL
+                      WHERE PERM_TYPE = 1004
+                  AND IUSERID = ${+lonaSavedFilterType.iuser_id}
+            )
+        `;
+      //filter base on contact date
+      if (lonaSavedFilterType.promiseDate) {
+        query += `AND CAST(loan.promise_date as DATE) = '${lonaSavedFilterType.promiseDate}'`;
+      }
+      //base on time line next step
+      if (lonaSavedFilterType.timline_next_step) {
+        query += `AND CAST(loan.timeline_next_step as DATE) = '${lonaSavedFilterType.timline_next_step}'`;
+      }
+      //base on promise date to pay
+      if (lonaSavedFilterType.contactDate) {
+        query += `AND CAST(loan.contact_date as DATE) = '${lonaSavedFilterType.contactDate}'`;
+      }
+      //base on met who
+      if (lonaSavedFilterType.metWho) {
+        query += `AND loan.met_who LIKE '%${lonaSavedFilterType.metWho}%'`;
+      }
+      //base on acc id
+      if (lonaSavedFilterType.acc_id) {
+        query += `AND loan.acc_id LIKE '%${lonaSavedFilterType.acc_id}%'`;
+      }
+      //query 30 rows per page
+      const skipRow = (+lonaSavedFilterType.currentPage - 1) * 30;
+      query += `  ORDER BY 
+                      loan.id DESC
+                  OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
+      const result: Record<string, any> = await this.dataSource.query(query);
+      const totalLoanQuery = `
+        SELECT COUNT(*) as total_loan FROM CMLDLQ_loan_overdue loan
+          WHERE loan.branchID IN (
+            SELECT PERMISSION
+                    FROM PERM_DTL
+                    WHERE PERM_TYPE = 1004
+                AND IUSERID = ${+lonaSavedFilterType.iuser_id}
+          )
+      `;
+      //30 rows per page
+      const totalLoans: { total_loan: number }[] =
+        await this.dataSource.query(totalLoanQuery);
+      const totalPage = Math.ceil(totalLoans[0].total_loan / 30);
+      return {
+        totalPage: totalPage,
+        totalLoans: totalLoans[0],
+        currentAcc: result,
       };
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);

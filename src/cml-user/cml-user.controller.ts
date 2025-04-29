@@ -1,11 +1,12 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { CmlUserService } from './cml-user.service';
+import { FilterTypeLOLRO } from './cml-user.interface';
 
 @Controller('cml-user')
 export class CmlUserController {
   constructor(private readonly cmlUserService: CmlUserService) {}
 
-  @Get(':userId')
+  @Get('/profile/:userId')
   async userProfile(@Param('userId') userId: string) {
     return await this.cmlUserService.userProfile(userId);
   }
@@ -22,6 +23,13 @@ export class CmlUserController {
 
   @Get('/recovery-lists/:iuser_id')
   async getRecoveryByIuserId(@Param('iuser_id') iuser_id: number) {
-    return await this.cmlUserService.getRecoveryByIuserId(iuser_id);
+    return await this.cmlUserService.getRecoveryByIuserId(+iuser_id);
+  }
+
+  @Get('/recovery-loan-officer-lists')
+  async getLOLROByIuserid(
+    @Query() filterTypeLOLRO: FilterTypeLOLRO,
+  ): Promise<any> {
+    return await this.cmlUserService.getLOLROByIuserId(filterTypeLOLRO);
   }
 }

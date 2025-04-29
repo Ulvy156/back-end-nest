@@ -1,5 +1,4 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-
 const ormconfig: TypeOrmModuleOptions = {
   type: 'mssql',
   host: '172.16.10.83',

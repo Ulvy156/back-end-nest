@@ -23,3 +23,13 @@ export interface FilterVillageManagement {
   is_export: number;
   page: number;
 }
+
+export interface LonaSavedFilterType {
+  promiseDate: string;
+  timline_next_step: string;
+  contactDate: string;
+  metWho: string;
+  iuser_id: number;
+  currentPage: number;
+  acc_id: string;
+}
