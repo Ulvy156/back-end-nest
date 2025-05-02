@@ -32,4 +32,5 @@ export interface LonaSavedFilterType {
   iuser_id: number;
   currentPage: number;
   acc_id: string;
+  role_id: number;
 }

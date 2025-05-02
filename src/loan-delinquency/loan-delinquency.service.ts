@@ -8,6 +8,7 @@ import {
   FilterVillageManagement,
   LonaSavedFilterType,
 } from './loan.service.interface';
+import { Role } from 'src/common/enums/role.enum';
 
 @Injectable()
 export class LoanDelinquencyService {
@@ -85,7 +86,7 @@ export class LoanDelinquencyService {
       const metWho = request.metWho || '';
 
       let query = `
-                SELECT
+        SELECT
           CMLDLQ_loan_overdue.*,
           CONCAT(CUST_MST.SURNAME_KH, ' ', CUST_MST.FIRSTNAME_KH) AS full_name_kh
         FROM
@@ -287,6 +288,8 @@ export class LoanDelinquencyService {
               CMLDLQ_loan_overdue loan
           JOIN 
               CUST_MST cm ON cm.CUST_ID = loan.cus_ID
+          JOIN 
+              USER_PROFILE_MST U ON U.IUSER_ID = loan.iuser_id
           WHERE 
               loan.branchID IN (
               SELECT PERMISSION
@@ -295,6 +298,10 @@ export class LoanDelinquencyService {
                   AND IUSERID = ${+lonaSavedFilterType.iuser_id}
             )
         `;
+      // If loans not in list that visit by LO/RO then BM can’t search it for fill their data.
+      if ((+lonaSavedFilterType.role_id as Role) === Role.BM) {
+        query += `AND U.ROLE_ID IN (32, 20) `;
+      }
       //filter base on contact date
       if (lonaSavedFilterType.promiseDate) {
         query += `AND CAST(loan.promise_date as DATE) = '${lonaSavedFilterType.promiseDate}'`;
