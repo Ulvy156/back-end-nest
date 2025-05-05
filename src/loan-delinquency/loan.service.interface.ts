@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 export interface FilterUploadedLoanQuery {
   user_id: string;
   promiseDate: string;

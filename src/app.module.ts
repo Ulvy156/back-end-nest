@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoanDelinquencyModule } from './loan-delinquency/loan-delinquency.module';
 import { CmlUserModule } from './cml-user/cml-user.module';
-import { UserModule } from './user/user.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import ormconfig from 'ormconfig';
 import { ConfigModule } from '@nestjs/config';
@@ -16,6 +15,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { InteractionSummaryModule } from './interaction-summary/interaction-summary.module';
 import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-team-dashboard.module';
+import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
 
 @Module({
   imports: [
@@ -31,7 +31,6 @@ import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-
     TypeOrmModule.forRoot(ormconfig),
     LoanDelinquencyModule,
     CmlUserModule,
-    UserModule,
     NotificationsModule,
     LocationsModule,
     BranchReportDashboardModule,
@@ -39,6 +38,7 @@ import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-
     ContactAccountModule,
     InteractionSummaryModule,
     RecoveryTeamDashboardModule,
+    HpoDashboardReportModule,
   ],
   controllers: [AppController],
   providers: [
