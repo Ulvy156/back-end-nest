@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-
+import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
@@ -15,6 +15,13 @@ async function bootstrap() {
     methods: 'GET,POST,PUT,DELETE', // Allow the necessary methods
     allowedHeaders: '*', // Allow necessary headers
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // Enables automatic type conversion
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   await app.listen(port, ip, () => {
     console.log(`Application is running on: http://${ip}:${port}`);
   });

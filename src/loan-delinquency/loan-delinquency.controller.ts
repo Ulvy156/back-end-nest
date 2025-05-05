@@ -2,7 +2,6 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LoanDelinquencyService } from './loan-delinquency.service';
 import {
   FilterLoanDetails,
-  FilterUploadedLoanQuery,
   FilterVillageManagement,
   LonaSavedFilterType,
 } from './loan.service.interface';
@@ -72,18 +71,11 @@ export class LoanDelinquencyController {
     return result;
   }
 
-  @Get('/filter-uploaded-loan')
-  async filterUploadedLoan(
-    @Query() query: FilterUploadedLoanQuery,
+  @Get('/filter-uploaded-loan-officer')
+  async filterUploadedLoanOfficer(
+    @Query() query: LonaSavedFilterType,
   ): Promise<any> {
-    return await this.loanDelinquencyService.filterUploadedLoan(query);
-  }
-
-  @Get('/filter-uploaded-loan-recovery')
-  async filterUploadedLoanRO(
-    @Query() query: FilterUploadedLoanQuery,
-  ): Promise<any> {
-    return await this.loanDelinquencyService.filterUploadedLoanRO(query);
+    return await this.loanDelinquencyService.filterUploadedLoanOfficer(query);
   }
 
   @Get('/view-loan-details')
