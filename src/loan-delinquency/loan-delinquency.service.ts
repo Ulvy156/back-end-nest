@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LoanDelinquency } from './entities/loan-delinquency.entity';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -9,6 +9,7 @@ import {
   LonaSavedFilterType,
 } from './loan.service.interface';
 import { Role } from 'src/common/enums/role.enum';
+import { normalizeError } from 'src/common/utils/exception-utils';
 
 @Injectable()
 export class LoanDelinquencyService {
@@ -27,7 +28,7 @@ export class LoanDelinquencyService {
         },
       });
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw normalizeError(error);
     }
   }
 
@@ -45,7 +46,7 @@ export class LoanDelinquencyService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, 400);
+      throw normalizeError(error);
     }
   }
 
@@ -73,7 +74,7 @@ export class LoanDelinquencyService {
 
       return { success: true, data: result };
     } catch (error) {
-      throw new HttpException(error, 400);
+      throw normalizeError(error);
     }
   }
 
@@ -117,7 +118,7 @@ export class LoanDelinquencyService {
         data: result,
       };
     } catch (error) {
-      throw new HttpException(error, 400);
+      throw normalizeError(error);
     }
   }
 
@@ -172,7 +173,7 @@ export class LoanDelinquencyService {
 
       return { success: true, data: result };
     } catch (error) {
-      throw new HttpException(error, 400);
+      throw normalizeError(error);
     }
   }
 
@@ -192,7 +193,7 @@ export class LoanDelinquencyService {
         data: res,
       };
     } catch (error) {
-      throw new HttpException(error, 400);
+      throw normalizeError(error);
     }
   }
 
@@ -261,7 +262,7 @@ export class LoanDelinquencyService {
         lastPage: lastPage,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -274,7 +275,7 @@ export class LoanDelinquencyService {
       const res: Record<string, any> = await this.dataSource.query(sql);
       return res[0];
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -347,7 +348,7 @@ export class LoanDelinquencyService {
         currentAcc: result,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

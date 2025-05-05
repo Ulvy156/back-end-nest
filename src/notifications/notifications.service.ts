@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { normalizeError } from 'src/common/utils/exception-utils';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -37,8 +38,8 @@ export class NotificationsService {
           AND timeline_next_step BETWEEN '${startDateOnly.toISOString()}' AND '${endDateOnly.toISOString()}'
       `;
       return await this.dataSource.query(query);
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw normalizeError(error);
     }
   }
 
@@ -58,7 +59,7 @@ export class NotificationsService {
         message: results,
       };
     } catch (err) {
-      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+      throw normalizeError(err);
     }
   }
 
@@ -77,7 +78,7 @@ export class NotificationsService {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return loans;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

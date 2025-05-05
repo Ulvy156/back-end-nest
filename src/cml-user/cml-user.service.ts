@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CmlUser } from './entities/cml-user.entity';
 import { DataSource } from 'typeorm';
 import { FilterTypeLOLRO } from './cml-user.interface';
+import { normalizeError } from 'src/common/utils/exception-utils';
 
 @Injectable()
 export class CmlUserService {
@@ -43,7 +44,7 @@ export class CmlUserService {
       const result: object = await this.dataSource.query(sql);
       return { success: true, result };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -54,7 +55,7 @@ export class CmlUserService {
 
       return { success: true, res };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -71,7 +72,7 @@ export class CmlUserService {
 
       return { success: true, res };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -95,7 +96,7 @@ export class CmlUserService {
         recovery_list: recoveryLists,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -143,7 +144,7 @@ export class CmlUserService {
         await this.dataSource.query(query);
       return recoveryLists;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

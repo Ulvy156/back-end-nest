@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
+import { normalizeError } from 'src/common/utils/exception-utils';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -20,7 +21,7 @@ export class InteractionSummaryService {
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -34,7 +35,7 @@ export class InteractionSummaryService {
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -48,7 +49,7 @@ export class InteractionSummaryService {
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

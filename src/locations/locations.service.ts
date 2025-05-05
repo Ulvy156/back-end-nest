@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { normalizeError } from 'src/common/utils/exception-utils';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class LocationsService {
         data: provinces,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -42,7 +43,7 @@ export class LocationsService {
         data: districts,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -61,7 +62,7 @@ export class LocationsService {
         data: communes,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -80,7 +81,7 @@ export class LocationsService {
         data: villages,
       };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

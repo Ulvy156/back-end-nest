@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 import { DataSource } from 'typeorm';
 import { RecoveryFilter } from './recovery-team-dashboard.interface';
+import { normalizeError } from 'src/common/utils/exception-utils';
 
 @Injectable()
 export class RecoveryTeamDashboardService {
@@ -17,7 +18,7 @@ export class RecoveryTeamDashboardService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -27,7 +28,7 @@ export class RecoveryTeamDashboardService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -39,7 +40,7 @@ export class RecoveryTeamDashboardService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -51,7 +52,7 @@ export class RecoveryTeamDashboardService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -63,7 +64,7 @@ export class RecoveryTeamDashboardService {
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }

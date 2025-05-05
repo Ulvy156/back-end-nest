@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { normalizeError } from 'src/common/utils/exception-utils';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class ViewBranchPermissionService {
       const converToArrStr = result.map((item) => item.PERMISSION);
       return converToArrStr;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 
@@ -42,7 +43,7 @@ export class ViewBranchPermissionService {
       const res: Record<string, any> = await this.dataSource.query(sql);
       return res;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw normalizeError(error);
     }
   }
 }
