@@ -175,4 +175,43 @@ export class CmlUserService {
       throw normalizeError(error);
     }
   }
+
+  async adminFilterUsers(
+    @Query() filterTypeLOLRO: FilterTypeLOLRO,
+  ): Promise<any> {
+    try {
+      const totalUsers = `
+        SELECT COUNT(*) as total_users FROM USER_PROFILE_MST U WHERE U.STATUS <> 'D'
+      `;
+      let query = `
+        SELECT U.ID, P.ROLE_ID, U.UserID,
+        P.IBR_ID, P.NAME, E.STAFF_ID, E.DESIGNATION
+        FROM CML_USER U 
+        INNER JOIN USER_PROFILE_MST P ON U.UserID = P.USER_ID
+        INNER JOIN EMP_MST E ON E.STAFF_ID = P.EMP_NO `;
+
+      if (filterTypeLOLRO.staffId) {
+        query += ` AND P.EMP_NO = ${filterTypeLOLRO.staffId}`;
+      }
+      if (filterTypeLOLRO.userName) {
+        query += ` AND LOWER(P.NAME) LIKE '%${filterTypeLOLRO.userName.toLowerCase()}%'`;
+      }
+      if (filterTypeLOLRO.targetUserIdFilter) {
+        query += ` AND P.IUSER_ID = ${filterTypeLOLRO.targetUserIdFilter}`;
+      }
+      if (filterTypeLOLRO.userPosition) {
+        query += ` AND LOWER(E.DESIGNATION) LIKE '%${filterTypeLOLRO.userPosition.toLowerCase()}%'`;
+      }
+      const skipRow = (+filterTypeLOLRO.page - 1) * 30;
+      //query 30 rows per page
+      query += `  WHERE P.STATUS <> 'D'
+                  ORDER BY 
+                      U.ID
+                  OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
+      const userLists: Record<string, any> = await this.dataSource.query(query);
+      return { userLists, totalUsers };
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
 }
