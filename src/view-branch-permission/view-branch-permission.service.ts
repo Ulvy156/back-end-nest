@@ -40,8 +40,8 @@ export class ViewBranchPermissionService {
         FROM BRANCH_MST B
         WHERE B.IBR_ID IN (${brIds.join(',')})          
       `;
-      const res: Record<string, any> = await this.dataSource.query(sql);
-      return res;
+      const branches: Record<string, any> = await this.dataSource.query(sql);
+      return { branches };
     } catch (error) {
       throw normalizeError(error);
     }
