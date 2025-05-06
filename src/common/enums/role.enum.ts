@@ -19,3 +19,5 @@ export enum Role {
   // System roles
   Admin = 1,
 }
+
+export const OfficerGroup = [Role.LO, Role.RO, Role.TRO];

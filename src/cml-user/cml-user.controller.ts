@@ -16,6 +16,13 @@ export class CmlUserController {
     return await this.cmlUserService.getLOByBranchID(br_id);
   }
 
+  @Get('/officer-lists/:iuser_id')
+  async getOfficerLevelBranchID(
+    @Param('iuser_id') iuser_id: number,
+  ): Promise<any> {
+    return await this.cmlUserService.getOfficerLevelBranchID(iuser_id);
+  }
+
   @Get('/working-date')
   async getWorkingDate() {
     return await this.cmlUserService.getWorkingDate();

@@ -4,6 +4,7 @@ import { CmlUser } from './entities/cml-user.entity';
 import { DataSource } from 'typeorm';
 import { FilterTypeLOLRO } from './cml-user.interface';
 import { normalizeError } from 'src/common/utils/exception-utils';
+import { OfficerGroup, Role } from 'src/common/enums/role.enum';
 
 @Injectable()
 export class CmlUserService {
@@ -76,6 +77,34 @@ export class CmlUserService {
     }
   }
 
+  //Get both LO LRO by iuser id
+  async getOfficerLevelBranchID(iuser_id: number) {
+    try {
+      const sql = `
+        SELECT 
+          U.IUSER_ID, 
+          U.NAME,
+          B.BR_CD
+        FROM USER_PROFILE_MST U
+        JOIN BRANCH_MST B ON U.IBR_ID = B.IBR_ID
+            WHERE U.IBR_ID IN (
+                SELECT PERMISSION
+                    FROM PERM_DTL
+                    WHERE PERM_TYPE = 1004
+                AND IUSERID = ${+iuser_id}
+            )
+        AND U.ROLE_ID IN (${[Role.LO, Role.RO].join(',')})
+        AND U.STATUS <> 'D'
+        ORDER BY B.BR_CD, U.NAME; 
+      `;
+      const res: [] = await this.dataSource.query(sql);
+
+      return { success: true, res };
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
+
   async getRecoveryByIuserId(iuser_id: number) {
     try {
       const query = `
@@ -104,10 +133,9 @@ export class CmlUserService {
     @Query() filterTypeLOLRO: FilterTypeLOLRO,
   ): Promise<any> {
     try {
-      console.log(filterTypeLOLRO);
+      const role_ids = [32]; //default value is for other user beside manager level
       //if request user is BM
-      const role_ids = [32]; //default value is for HPO
-      if (+filterTypeLOLRO.role_id === 14) {
+      if (!OfficerGroup.includes(+filterTypeLOLRO.role_id)) {
         role_ids.push(20);
       }
       let query = `

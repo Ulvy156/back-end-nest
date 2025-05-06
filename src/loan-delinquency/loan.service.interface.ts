@@ -33,3 +33,19 @@ export interface LonaSavedFilterType {
   acc_id: string;
   role_id: number;
 }
+
+export interface FilterLoanQuery {
+  staffId: string;
+  currency: string;
+  branchId: string;
+  saction: number;
+  from_dt: string;
+  to_dt: string;
+  day_from: string;
+  day_to: string;
+  acc_id: string;
+  cus_id: string;
+  cus_name: string;
+  LOID: string;
+  village: string;
+}

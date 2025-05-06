@@ -4,6 +4,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import {
   FilterLoanDetails,
+  FilterLoanQuery,
   FilterVillageManagement,
   LonaSavedFilterType,
 } from './loan.service.interface';
@@ -48,24 +49,10 @@ export class LoanDelinquencyService {
     }
   }
 
-  async filterLoanByBranchId(
-    staffId: string,
-    currency: string = '0',
-    branchId: string = '',
-    saction: number = 1,
-    fromDt: string = '',
-    toDt: string = '',
-    daysFrom: string = '0',
-    daysTo: string = '0',
-    accountId: string = '',
-    custId: string = '',
-    custName: string = '',
-    LOID: string = '',
-    village: string = '',
-  ) {
+  async filterLoanByBranchId(filterLoanQuery: FilterLoanQuery) {
     try {
       // SQL query string with parameters
-      const sql = `EXEC RPT_Loan_Overdue_CHM_2 '${staffId}','${currency}','${branchId}',${saction},'${fromDt}','${toDt}',${parseInt(daysFrom)},${parseInt(daysTo)},'${accountId}','${custId}','${custName}','${LOID}','${village}'`;
+      const sql = `EXEC RPT_Loan_Overdue_CHM_2 '${filterLoanQuery.staffId}','${filterLoanQuery.currency}','${filterLoanQuery.branchId}',${filterLoanQuery.saction},'${filterLoanQuery.from_dt}','${filterLoanQuery.to_dt}',${parseInt(filterLoanQuery.day_from)},${parseInt(filterLoanQuery.day_to)},'${filterLoanQuery.acc_id}','${filterLoanQuery.cus_id}','${filterLoanQuery.cus_name}','${filterLoanQuery.LOID}','${filterLoanQuery.village}'`;
 
       // Execute the SQL query
       const result: [] = await this.dataSource.query(sql);

@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LoanDelinquencyService } from './loan-delinquency.service';
 import {
   FilterLoanDetails,
+  FilterLoanQuery,
   FilterVillageManagement,
   LonaSavedFilterType,
 } from './loan.service.interface';
@@ -38,35 +39,10 @@ export class LoanDelinquencyController {
   }
   @Get('/recovery-loans-overdue')
   async filterLoanByBranchId(
-    @Query('staffId') staffId: string,
-    @Query('currency') currency: string,
-    @Query('branchId') branchId: string,
-    @Query('saction') saction: number,
-    @Query('from_dt') fromDate: string,
-    @Query('to_dt') toDate: string,
-    @Query('day_from') daysFrom: string,
-    @Query('day_to') daysTo: string,
-    @Query('acc_id') accountId: string,
-    @Query('cus_id') custId: string,
-    @Query('cus_name') custName: string,
-    @Query('LOID') LOID: string,
-    @Query('village') village: string,
+    @Query() filterLoanQuery: FilterLoanQuery,
   ): Promise<any> {
-    const result = await this.loanDelinquencyService.filterLoanByBranchId(
-      staffId,
-      currency,
-      branchId,
-      saction,
-      fromDate,
-      toDate,
-      daysFrom,
-      daysTo,
-      accountId,
-      custId,
-      custName,
-      LOID,
-      village,
-    );
+    const result =
+      await this.loanDelinquencyService.filterLoanByBranchId(filterLoanQuery);
 
     return result;
   }
