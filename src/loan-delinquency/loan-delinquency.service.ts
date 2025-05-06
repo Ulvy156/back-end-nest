@@ -256,7 +256,7 @@ export class LoanDelinquencyService {
                     FROM PERM_DTL
                     WHERE PERM_TYPE = 1004
                 AND IUSERID = ${+lonaSavedFilterType.iuser_id}
-          ) AND U.ROLE_ID IN (32, 20) 
+          )
       `;
       //filter base on contact date
       if (lonaSavedFilterType.promiseDate) {
