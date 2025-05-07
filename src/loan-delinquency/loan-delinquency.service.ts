@@ -216,12 +216,11 @@ export class LoanDelinquencyService {
     }
   }
 
-  async getLoanOverdueFollowup(acc_id: string): Promise<any> {
+  async getLoanOverdueFollowup(id: string): Promise<any> {
     try {
       const sql = `  
-            SELECT TOP 1  * FROM CMLDLQ_loan_overdue L 
-            WHERE  L.acc_id ='${acc_id}'
-            ORDER BY id DESC;`;
+            SELECT * FROM CMLDLQ_loan_overdue L 
+            WHERE  L.id ='${id}'`;
       const res: Record<string, any> = await this.dataSource.query(sql);
       return res[0];
     } catch (error) {
@@ -233,6 +232,7 @@ export class LoanDelinquencyService {
     try {
       let query = `
           SELECT 
+              U.NAME,
               loan.*,
               ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh
           FROM 

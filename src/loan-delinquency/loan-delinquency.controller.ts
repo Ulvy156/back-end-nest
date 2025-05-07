@@ -75,8 +75,8 @@ export class LoanDelinquencyController {
     );
   }
 
-  @Get('/follow-up-loan/:accId')
-  async getLoanOverdueFollowup(@Param('accId') accId: string): Promise<any> {
-    return await this.loanDelinquencyService.getLoanOverdueFollowup(accId);
+  @Get('/follow-up-loan/:id')
+  async getLoanOverdueFollowup(@Param('id') id: string): Promise<any> {
+    return await this.loanDelinquencyService.getLoanOverdueFollowup(id);
   }
 }
