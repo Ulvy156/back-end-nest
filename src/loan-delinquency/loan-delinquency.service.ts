@@ -68,7 +68,11 @@ export class LoanDelinquencyService {
       let query = `
             SELECT 
                 loan.*,
-                ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh
+                ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh,
+                CASE 
+                  WHEN loan.actions = 'C' THEN 'Create' 
+                  ELSE 'Follow-UP' 
+                END AS actions
             FROM 
                 CMLDLQ_loan_overdue loan
             JOIN 
@@ -234,7 +238,11 @@ export class LoanDelinquencyService {
           SELECT 
               U.NAME,
               loan.*,
-              ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh
+              ISNULL(cm.SURNAME_KH, '') + ' ' + ISNULL(cm.FIRSTNAME_KH, '') AS full_name_kh,
+              CASE 
+                WHEN loan.actions = 'C' THEN 'Create' 
+                ELSE 'Follow-UP' 
+              END AS full_actions
           FROM 
               CMLDLQ_loan_overdue loan
           JOIN 
