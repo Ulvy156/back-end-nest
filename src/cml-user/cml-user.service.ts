@@ -4,7 +4,7 @@ import { CmlUser } from './entities/cml-user.entity';
 import { DataSource } from 'typeorm';
 import { FilterTypeLOLRO } from './cml-user.interface';
 import { normalizeError } from 'src/common/utils/exception-utils';
-import { OfficerGroup, Role } from 'src/common/enums/role.enum';
+import { Role } from 'src/common/enums/role.enum';
 
 @Injectable()
 export class CmlUserService {
@@ -135,7 +135,7 @@ export class CmlUserService {
     try {
       const role_ids = [32]; //default value is for other user beside manager level
       //if request user is BM
-      if (!OfficerGroup.includes(+filterTypeLOLRO.role_id)) {
+      if ((+filterTypeLOLRO.role_id as Role) === Role.HPRO) {
         role_ids.push(20);
       }
       let query = `
