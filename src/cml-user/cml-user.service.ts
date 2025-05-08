@@ -134,8 +134,8 @@ export class CmlUserService {
   ): Promise<any> {
     try {
       const role_ids = [32]; //default value is for other user beside manager level
-      //if request user is BM
-      if ((+filterTypeLOLRO.role_id as Role) === Role.HPRO) {
+      //if request user is BM the show both LO/LRO
+      if ((+filterTypeLOLRO.role_id as Role) === Role.BM) {
         role_ids.push(20);
       }
       let query = `
