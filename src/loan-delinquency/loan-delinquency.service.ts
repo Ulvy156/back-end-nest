@@ -234,7 +234,7 @@ export class LoanDelinquencyService {
 
   async filterUploadedLoanByECID(lonaSavedFilterType: LonaSavedFilterType) {
     try {
-      let query = `
+      let currentLoansQuery = `
           SELECT 
               U.NAME,
               loan.*,
@@ -267,7 +267,7 @@ export class LoanDelinquencyService {
           )
       `;
       const conditions: string[] = [];
-      //filter base on contact date
+      //filter base on promise date
       if (lonaSavedFilterType.promiseDate) {
         conditions.push(
           `AND loan.promise_date = '${lonaSavedFilterType.promiseDate}'`,
@@ -279,7 +279,7 @@ export class LoanDelinquencyService {
           `AND loan.timeline_next_step = '${lonaSavedFilterType.timline_next_step}'`,
         );
       }
-      //base on promise date to pay
+      //base on contact
       if (lonaSavedFilterType.contactDate) {
         conditions.push(
           `AND loan.contact_date = '${lonaSavedFilterType.contactDate}'`,
@@ -306,22 +306,21 @@ export class LoanDelinquencyService {
       //query 30 rows per page
       const skipRow = (+lonaSavedFilterType.currentPage - 1) * 30;
 
-      query += conditions.join(' ');
-      query += `  ORDER BY 
+      currentLoansQuery += conditions.join(' ');
+      currentLoansQuery += `  ORDER BY 
                       loan.id DESC
                   OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
 
       totalLoanQuery += conditions.join(' ');
 
-      const result: Record<string, any> = await this.dataSource.query(query);
-      //30 rows per page
-      const totalLoans: { total_loan: number }[] =
-        await this.dataSource.query(totalLoanQuery);
-      const totalPage = Math.ceil(totalLoans[0].total_loan / 30);
+      const [currentLoans, totalLoans] = (await Promise.all([
+        this.dataSource.query(currentLoansQuery),
+        this.dataSource.query(totalLoanQuery),
+      ])) as [Record<string, any>[], { total_loan: number }[]];
+
       return {
-        totalPage: totalPage,
-        totalLoans: totalLoans[0],
-        currentAcc: result,
+        totalLoans,
+        currentLoans,
       };
     } catch (error) {
       throw normalizeError(error);

@@ -192,9 +192,9 @@ export class CmlUserService {
       const [userList, totalUsers] = (await Promise.all([
         this.dataSource.query(query),
         this.dataSource.query(totalUsersQuery),
-      ])) as [Record<string, any>[], Record<string, any>[]];
+      ])) as [Record<string, any>[], { total_users: number }[]];
 
-      return { userList, totalUsers };
+      return { userList, totalUsers: totalUsers[0].total_users };
     } catch (error) {
       throw normalizeError(error);
     }
