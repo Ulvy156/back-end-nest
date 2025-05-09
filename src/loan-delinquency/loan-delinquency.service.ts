@@ -307,8 +307,9 @@ export class LoanDelinquencyService {
       const skipRow = (+lonaSavedFilterType.currentPage - 1) * 30;
 
       currentLoansQuery += conditions.join(' ');
-      currentLoansQuery += `  ORDER BY 
-                      loan.id DESC
+      currentLoansQuery += `  
+                  ORDER BY 
+                    loan.id DESC
                   OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
 
       totalLoanQuery += conditions.join(' ');
