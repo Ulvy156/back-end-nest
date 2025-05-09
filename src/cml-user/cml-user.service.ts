@@ -151,26 +151,50 @@ export class CmlUserService {
               AND IUSERID = ${filterTypeLOLRO.searcherUserId}
           ) AND P.STATUS <> 'D' AND P.ROLE_ID IN (${role_ids.join(',')})
       `;
+      let totalUsersQuery = `
+        SELECT COUNT(*) AS total_users
+        FROM USER_PROFILE_MST U 
+        WHERE U.IBR_ID IN (
+              SELECT PERMISSION
+                  FROM PERM_DTL
+                  WHERE PERM_TYPE = 1004
+              AND IUSERID = ${filterTypeLOLRO.searcherUserId}
+          ) AND U.STATUS <> 'D' AND U.ROLE_ID IN (${role_ids.join(',')})
+      `;
+      const conditions: string[] = [];
+
       if (filterTypeLOLRO.staffId) {
-        query += ` AND P.EMP_NO = ${filterTypeLOLRO.staffId}`;
+        conditions.push(` AND P.EMP_NO = ${filterTypeLOLRO.staffId}`);
       }
       if (filterTypeLOLRO.userName) {
-        query += ` AND LOWER(P.NAME) LIKE '%${filterTypeLOLRO.userName.toLowerCase()}%'`;
+        conditions.push(
+          ` AND LOWER(P.NAME) LIKE '%${filterTypeLOLRO.userName.toLowerCase()}%'`,
+        );
       }
       if (filterTypeLOLRO.targetUserIdFilter) {
-        query += ` AND P.IUSER_ID = ${filterTypeLOLRO.targetUserIdFilter}`;
+        conditions.push(
+          ` AND P.IUSER_ID = ${filterTypeLOLRO.targetUserIdFilter}`,
+        );
       }
       if (filterTypeLOLRO.userPosition) {
-        query += ` AND LOWER(E.DESIGNATION) LIKE '%${filterTypeLOLRO.userPosition.toLowerCase()}%'`;
+        conditions.push(
+          ` AND LOWER(E.DESIGNATION) LIKE '%${filterTypeLOLRO.userPosition.toLowerCase()}%'`,
+        );
       }
-      const skipRow = (+filterTypeLOLRO.page - 1) * 30;
       //query 30 rows per page
-      query += `  ORDER BY 
+      const skipRow = (+filterTypeLOLRO.page - 1) * 30;
+
+      query += ` ${conditions.join(' ')} ORDER BY 
                       U.ID
                   OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
-      const recoveryLists: Record<string, any> =
-        await this.dataSource.query(query);
-      return recoveryLists;
+      totalUsersQuery += ` ${conditions.join(' ')}`;
+
+      const [userList, totalUsers] = (await Promise.all([
+        this.dataSource.query(query),
+        this.dataSource.query(totalUsersQuery),
+      ])) as [Record<string, any>[], Record<string, any>[]];
+
+      return { userList, totalUsers };
     } catch (error) {
       throw normalizeError(error);
     }

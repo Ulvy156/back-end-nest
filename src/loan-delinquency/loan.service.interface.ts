@@ -32,6 +32,7 @@ export interface LonaSavedFilterType {
   currentPage: number;
   acc_id: string;
   role_id: number;
+  created_by_iuser_id: number;
 }
 
 export interface FilterLoanQuery {

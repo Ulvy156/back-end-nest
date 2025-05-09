@@ -266,36 +266,53 @@ export class LoanDelinquencyService {
                 AND IUSERID = ${+lonaSavedFilterType.iuser_id}
           )
       `;
+      const conditions: string[] = [];
       //filter base on contact date
       if (lonaSavedFilterType.promiseDate) {
-        query += `AND CAST(loan.promise_date as DATE) = '${lonaSavedFilterType.promiseDate}'`;
-        totalLoanQuery += `AND CAST(loan.promise_date as DATE) = '${lonaSavedFilterType.promiseDate}'`;
+        conditions.push(
+          `AND loan.promise_date = '${lonaSavedFilterType.promiseDate}'`,
+        );
       }
       //base on time line next step
       if (lonaSavedFilterType.timline_next_step) {
-        query += `AND CAST(loan.timeline_next_step as DATE) = '${lonaSavedFilterType.timline_next_step}'`;
-        totalLoanQuery += `AND CAST(loan.timeline_next_step as DATE) = '${lonaSavedFilterType.timline_next_step}'`;
+        conditions.push(
+          `AND loan.timeline_next_step = '${lonaSavedFilterType.timline_next_step}'`,
+        );
       }
       //base on promise date to pay
       if (lonaSavedFilterType.contactDate) {
-        query += `AND CAST(loan.contact_date as DATE) = '${lonaSavedFilterType.contactDate}'`;
-        totalLoanQuery += `AND CAST(loan.contact_date as DATE) = '${lonaSavedFilterType.contactDate}'`;
+        conditions.push(
+          `AND loan.contact_date = '${lonaSavedFilterType.contactDate}'`,
+        );
       }
       //base on met who
       if (lonaSavedFilterType.metWho) {
-        query += `AND loan.met_who LIKE N'%${lonaSavedFilterType.metWho}%'`;
-        totalLoanQuery += `AND loan.met_who LIKE N'%${lonaSavedFilterType.metWho}%'`;
+        conditions.push(
+          `AND loan.met_who LIKE N'%${lonaSavedFilterType.metWho}%'`,
+        );
       }
       //base on acc id
       if (lonaSavedFilterType.acc_id) {
-        query += `AND loan.acc_id LIKE '%${lonaSavedFilterType.acc_id}%'`;
-        totalLoanQuery += `AND loan.acc_id LIKE '%${lonaSavedFilterType.acc_id}%'`;
+        conditions.push(
+          `AND loan.acc_id LIKE '%${lonaSavedFilterType.acc_id}%'`,
+        );
+      }
+      //base on acc was created by who ?
+      if (lonaSavedFilterType.created_by_iuser_id) {
+        conditions.push(
+          `AND loan.iuser_id = ${+lonaSavedFilterType.created_by_iuser_id}`,
+        );
       }
       //query 30 rows per page
       const skipRow = (+lonaSavedFilterType.currentPage - 1) * 30;
+
+      query += conditions.join(' ');
       query += `  ORDER BY 
                       loan.id DESC
                   OFFSET ${skipRow} ROWS FETCH NEXT 30 ROWS ONLY;`;
+
+      totalLoanQuery += conditions.join(' ');
+
       const result: Record<string, any> = await this.dataSource.query(query);
       //30 rows per page
       const totalLoans: { total_loan: number }[] =
