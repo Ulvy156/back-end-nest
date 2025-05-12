@@ -1,0 +1,44 @@
+name: Node.js CI with Security Testing
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    # Install dependencies
+    - run: npm ci
+
+    # Run static code analysis (ESLint) for security issues
+    - name: Run static code analysis (ESLint)
+      run: npm run lint
+
+    # Run Snyk Dependency Scan for vulnerabilities
+    - name: Run Snyk Dependency Scan for vulnerabilities
+      run: npm audit
+
+    # Run build script (if defined)
+    - run: npm run build --if-present
+
+    # Run tests (unit tests, integration tests, etc.)
+    - run: npm test
