@@ -36,11 +36,11 @@ jobs:
 
     # Check for secrets in your code (GitHub Secret Scanning)
     - name: Check for secret leaks
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: 'javascript'
     - name: Run CodeQL analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: 'security'
 
