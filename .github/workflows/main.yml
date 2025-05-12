@@ -3,10 +3,10 @@ name: CI/CD for NestJS - Security Testing Only
 on:
   push:
     branches:
-      - master  # Changed to master branch
+      - master
   pull_request:
     branches:
-      - master  # Changed to master branch
+      - master
 
 jobs:
   security-checks:
@@ -28,10 +28,10 @@ jobs:
       run: npm run lint  # optional, only if you have eslint configured
 
     - name: Run Snyk Dependency Scan for vulnerabilities
-      uses: snyk/actions/node@v1
+      uses: snyk/actions@v2  # Updated to snyk/actions@v2
       with:
         snyk-token: ${{ secrets.SNYK_TOKEN }}  # Set up your Snyk token in GitHub secrets
-        run: snyk test  # Scans for vulnerabilities in dependencies
+      run: snyk test  # Scans for vulnerabilities in dependencies
 
     - name: Check for vulnerabilities with Trivy (if you have a Dockerfile)
       run: |
