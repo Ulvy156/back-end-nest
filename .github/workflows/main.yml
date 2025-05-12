@@ -1,12 +1,15 @@
-name: CI/CD for NestJS (Security Testing Only)
+name: CI/CD for NestJS - Security Testing Only
 
 on:
   push:
     branches:
-      - master
+      - master  # Changed to master branch
+  pull_request:
+    branches:
+      - master  # Changed to master branch
 
 jobs:
-  build-and-deploy:
+  security-checks:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,28 +24,24 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run static code analysis (ESLint) for security
-      run: npm run lint  # optional, only if you have eslint for code security checks
+    - name: Run static code analysis (ESLint) for security issues
+      run: npm run lint  # optional, only if you have eslint configured
 
-    - name: Check for vulnerabilities with OWASP Dependency-Check
-      uses: aquasecurity/trivy-action@v0.0.10
+    - name: Run Snyk Dependency Scan for vulnerabilities
+      uses: snyk/actions/node@v1
       with:
-        scan-type: 'all'  # Scan dependencies for security vulnerabilities
+        snyk-token: ${{ secrets.SNYK_TOKEN }}  # Set up your Snyk token in GitHub secrets
+        run: snyk test  # Scans for vulnerabilities in dependencies
 
-    - name: Scan Docker image for vulnerabilities
+    - name: Check for vulnerabilities with Trivy (if you have a Dockerfile)
       run: |
-        docker build -t nest-app .
-        trivy image --no-progress nest-app  # Scanning the Docker image itself
+        trivy fs --no-progress .  # Scans the file system for known vulnerabilities, optional if using Docker
 
-    - name: Deploy via SSH (only if security checks pass)
-      uses: appleboy/ssh-action@v1.0.0
+    - name: Check for secret leaks using GitHub Secret Scanning (optional)
+      uses: github/codeql-action/init@v2
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_KEY }}
-        script: |
-          cd /var/www/nest-app
-          git pull origin main
-          npm install
-          npm run build
-          pm2 restart nest-api || pm2 start dist/main.js --name nest-api
+        languages: 'javascript'
+    - name: Run CodeQL analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: 'security'
