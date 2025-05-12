@@ -32,10 +32,7 @@ jobs:
 
     # Run Snyk Dependency Scan for vulnerabilities
     - name: Run Snyk Dependency Scan for vulnerabilities
-      uses: snyk/actions/node@v2
-      with:
-        snyk-token: ${{ secrets.SNYK_TOKEN }}  # Set up your Snyk token in GitHub secrets
-      run: snyk test  # Scans for vulnerabilities in dependencies
+      run: npm audit
 
     # Check for secrets in your code (GitHub Secret Scanning)
     - name: Check for secret leaks
