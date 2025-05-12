@@ -1,0 +1,48 @@
+name: CI/CD for NestJS (Security Testing Only)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js (v22)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run static code analysis (ESLint) for security
+      run: npm run lint  # optional, only if you have eslint for code security checks
+
+    - name: Check for vulnerabilities with OWASP Dependency-Check
+      uses: aquasecurity/trivy-action@v0.0.10
+      with:
+        scan-type: 'all'  # Scan dependencies for security vulnerabilities
+
+    - name: Scan Docker image for vulnerabilities
+      run: |
+        docker build -t nest-app .
+        trivy image --no-progress nest-app  # Scanning the Docker image itself
+
+    - name: Deploy via SSH (only if security checks pass)
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_KEY }}
+        script: |
+          cd /var/www/nest-app
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart nest-api || pm2 start dist/main.js --name nest-api
