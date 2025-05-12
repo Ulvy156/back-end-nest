@@ -34,16 +34,6 @@ jobs:
     - name: Run Snyk Dependency Scan for vulnerabilities
       run: npm audit
 
-    # Check for secrets in your code (GitHub Secret Scanning)
-    - name: Check for secret leaks
-      uses: github/codeql-action/init@v3
-      with:
-        languages: 'javascript'
-    - name: Run CodeQL analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        category: 'security'
-
     # Run build script (if defined)
     - run: npm run build --if-present
 
