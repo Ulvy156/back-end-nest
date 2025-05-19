@@ -221,7 +221,7 @@ export class CmlUserService {
         query += ` AND LOWER(P.NAME) LIKE '%${filterTypeLOLRO.userName.toLowerCase()}%'`;
       }
       if (filterTypeLOLRO.targetUserIdFilter) {
-        query += ` AND P.IUSER_ID = ${filterTypeLOLRO.targetUserIdFilter}`;
+        query += ` AND P.IUSER_ID = '${filterTypeLOLRO.targetUserIdFilter}'`;
       }
       if (filterTypeLOLRO.userPosition) {
         query += ` AND LOWER(E.DESIGNATION) LIKE '%${filterTypeLOLRO.userPosition.toLowerCase()}%'`;
