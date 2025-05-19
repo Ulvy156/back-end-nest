@@ -84,7 +84,8 @@ export class CmlUserService {
         SELECT 
           U.IUSER_ID, 
           U.NAME,
-          B.BR_CD
+          B.BR_CD,
+          U.ROLE_ID
         FROM USER_PROFILE_MST U
         JOIN BRANCH_MST B ON U.IBR_ID = B.IBR_ID
             WHERE U.IBR_ID IN (
