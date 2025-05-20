@@ -39,4 +39,14 @@ export class LoReportDashboardService {
       throw normalizeError(error);
     }
   }
+
+  async getTotalContactAccLO(iuser_id: number = 0): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetStaffRecommendAccLO ${iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
 }
