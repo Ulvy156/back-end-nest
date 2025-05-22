@@ -16,9 +16,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { InteractionSummaryModule } from './interaction-summary/interaction-summary.module';
 import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-team-dashboard.module';
 import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
+import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboard.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // makes ConfigService available everywhere
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -27,7 +31,6 @@ import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-r
         },
       ],
     }),
-    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(ormconfig),
     LoanDelinquencyModule,
     CmlUserModule,
@@ -39,6 +42,7 @@ import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-r
     InteractionSummaryModule,
     RecoveryTeamDashboardModule,
     HpoDashboardReportModule,
+    LoReportDashboardModule,
   ],
   controllers: [AppController],
   providers: [

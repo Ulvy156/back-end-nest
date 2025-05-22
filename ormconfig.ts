@@ -1,11 +1,16 @@
+/* eslint-disable prettier/prettier */
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+//load .env file
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const ormconfig: TypeOrmModuleOptions = {
   type: 'mssql',
-  host: '172.16.10.83',
-  port: 1433,
-  username: 'sa',
-  password: 'Chm_Sql@itD2',
-  database: 'CML_Pilot',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT ?? '1433'),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: false,
   autoLoadEntities: true, // Loads all columns dynamically
