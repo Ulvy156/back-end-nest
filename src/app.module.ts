@@ -20,6 +20,9 @@ import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboa
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // makes ConfigService available everywhere
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -28,7 +31,6 @@ import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboa
         },
       ],
     }),
-    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(ormconfig),
     LoanDelinquencyModule,
     CmlUserModule,

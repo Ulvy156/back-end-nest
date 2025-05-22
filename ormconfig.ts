@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const ormconfig: TypeOrmModuleOptions = {
   type: 'mssql',
