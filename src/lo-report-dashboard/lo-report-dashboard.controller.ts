@@ -11,18 +11,29 @@ export class LoReportDashboardController {
   async getContactToolsAccLO(
     @Param('iuser_id') iuser_id: number,
   ): Promise<any> {
-    return await this.loReportDashboardService.getContactToolsAccLO(iuser_id);
+    return await this.loReportDashboardService.getContactToolsAccLO(+iuser_id);
   }
 
   @Get('/step-takens-account/:iuser_id')
   async getStepTakensAccLO(@Param('iuser_id') iuser_id: number): Promise<any> {
-    return await this.loReportDashboardService.getStepTakensAccLO(iuser_id);
+    return await this.loReportDashboardService.getStepTakensAccLO(+iuser_id);
   }
 
   @Get('/staff-recommend-account/:iuser_id')
   async getStaffRecommendAccLO(
     @Param('iuser_id') iuser_id: number,
   ): Promise<any> {
-    return await this.loReportDashboardService.getStaffRecommendAccLO(iuser_id);
+    return await this.loReportDashboardService.getStaffRecommendAccLO(
+      +iuser_id,
+    );
+  }
+
+  @Get('/par-bucket/:iuser_id')
+  async getCollectionParBucketLO(
+    @Param('iuser_id') iuser_id: number,
+  ): Promise<any> {
+    return await this.loReportDashboardService.getCollectionParBucketLO(
+      +iuser_id,
+    );
   }
 }
