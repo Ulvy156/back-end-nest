@@ -1,46 +1,179 @@
-# 🎯 NestJS Backend API
+# KIVA BACK-END NEST JS
 
-A scalable and modular backend API built with [NestJS](https://nestjs.com/) version 11, using TypeORM, Passport-based authentication, and MSSQL integration.
-
----
-
-## 🚀 Tech Stack
-
-- **Framework**: NestJS `v11`
-- **Database**: MS SQL Server (`mssql`, `typeorm`)
-- **Validation**: `class-validator`, `class-transformer`
-- **Rate Limiting**: NestJS Throttler
-- **Configuration**: `.env` via `@nestjs/config`
-- **Testing**: Jest, Supertest
-- **Linting & Formatting**: ESLint + Prettier
-- **Transpilation**: TypeScript with SWC
+A scalable server-side application built using [NestJS](https://nestjs.com/) with TypeScript, TypeORM, Passport authentication, and robust developer tooling for CI/CD, linting, formatting, and testing.
 
 ---
 
-## 📦 Install Dependencies
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Development](#development)
+- [Testing](#testing)
+- [Scripts](#scripts)
+- [Project Structure](#project-structure)
+- [Dependency Policy](#dependency-policy)
+- [License](#license)
+
+---
+
+## Features
+
+- **NestJS v11**: Modular and scalable Node.js framework.
+- **TypeScript**: Strong typing and modern JS features.
+- **TypeORM**: ORM with support for MSSQL and other databases.
+- **Passport.js**: JWT and Local authentication strategies.
+- **Rate Limiting**: Built-in throttler.
+- **Environment Configuration**: Via dotenv and @nestjs/config.
+- **Validation**: Using class-validator and class-transformer.
+- **Testing**: Jest, Supertest, E2E config included.
+- **Linting & Formatting**: ESLint and Prettier.
+- **Modern Build Tools**: SWC, ts-node, ts-loader.
+
+---
+
+## Requirements
+
+- Node.js v18+
+- npm v9+ or yarn
+- MS SQL Server (or compatible database for TypeORM)
+- (Optional) Docker for containerized development
+
+---
+
+## Installation
 
 ```bash
-## 📦 Install Dependencies
+git clone <your-repo-url>
+cd back-end-nest
 npm install
-
+# or
+yarn install
 ```
 
-```bash
+---
+
 ## Development
-$ npm run start
-```
+
+Start the development server with hot-reload:
 
 ```bash
-# Watch mode
-$ npm run start:dev
+npm run start:dev
+# or
+yarn start:dev
 ```
 
+Start in debug mode:
+
 ```bash
-## 📦 Production mode
+npm run start:debug
+```
+
+Build for production:
+
+```bash
 npm run build
 ```
 
+Start the built app:
+
 ```bash
-## 📦 Production mode
 npm run start:prod
 ```
+
+---
+
+## Testing
+
+Run all tests:
+
+```bash
+npm test
+# or
+yarn test
+```
+
+Run tests in watch mode:
+
+```bash
+npm run test:watch
+```
+
+Run coverage report:
+
+```bash
+npm run test:cov
+```
+
+Run E2E tests:
+
+```bash
+npm run test:e2e
+```
+
+---
+
+## Linting & Formatting
+
+Automatically fix lint issues:
+
+```bash
+npm run lint
+```
+
+Format all code:
+
+```bash
+npm run format
+```
+
+---
+
+## Scripts
+
+| Script          | Description                                 |
+|-----------------|---------------------------------------------|
+| `start`         | Start the app                               |
+| `start:dev`     | Start in development mode (hot reload)      |
+| `start:debug`   | Start in debug mode                         |
+| `start:prod`    | Start built app in production               |
+| `build`         | Build the app                               |
+| `test`          | Run tests                                   |
+| `test:watch`    | Run tests in watch mode                     |
+| `test:cov`      | Run test coverage                           |
+| `test:e2e`      | Run end-to-end tests                        |
+| `lint`          | Lint and auto-fix code                      |
+| `format`        | Format code with Prettier                   |
+
+---
+
+## Project Structure
+
+```
+src/            # Source files (main app modules, controllers, services)
+test/           # Test specs (unit and e2e)
+coverage/       # Test coverage output
+dist/           # Built output
+.eslintrc.js    # ESLint configuration
+.prettierrc     # Prettier configuration
+tsconfig.json   # TypeScript configuration
+```
+
+---
+
+## Dependency Policy
+
+- All `@nestjs/*` packages use the same major version.
+- Use pinned or caret (`^`) versions for stability, but avoid `*` except where absolutely necessary (replace `"@nestjs/mapped-types": "*"` as soon as possible).
+- Update dependencies regularly and review for security issues.
+- Prefer semantic versioning, test thoroughly after major upgrades.
+- Lockfile (`package-lock.json` or `yarn.lock`) must be committed and kept up to date.
+
+---
+
+## License
+
+This project is **UNLICENSED**. See `package.json` for details.
+
+---
