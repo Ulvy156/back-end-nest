@@ -154,13 +154,13 @@ export class CmlUserService {
       `;
       let totalUsersQuery = `
         SELECT COUNT(*) AS total_users
-        FROM USER_PROFILE_MST U 
-        WHERE U.IBR_ID IN (
+        FROM USER_PROFILE_MST P 
+        WHERE P.IBR_ID IN (
               SELECT PERMISSION
                   FROM PERM_DTL
                   WHERE PERM_TYPE = 1004
               AND IUSERID = ${filterTypeLOLRO.searcherUserId}
-          ) AND U.STATUS <> 'D' AND U.ROLE_ID IN (${role_ids.join(',')})
+          ) AND P.STATUS <> 'D' AND P.ROLE_ID IN (${role_ids.join(',')})
       `;
       const conditions: string[] = [];
 
