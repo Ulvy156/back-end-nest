@@ -13,7 +13,7 @@ export class CmpReportDashboardService {
 
   async getCollectedAccountCMP(filterData: CmpReportInterface): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetStaffRecommendAccLO ${filterData.filterOption}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAccCMP ${filterData.filterOption}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
