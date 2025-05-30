@@ -17,6 +17,8 @@ import { InteractionSummaryModule } from './interaction-summary/interaction-summ
 import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-team-dashboard.module';
 import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
 import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboard.module';
+import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dashboard.module';
+import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboa
     RecoveryTeamDashboardModule,
     HpoDashboardReportModule,
     LoReportDashboardModule,
+    CmpReportDashboardModule,
+    LoanOvedueModule,
   ],
   controllers: [AppController],
   providers: [
