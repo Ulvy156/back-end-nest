@@ -21,9 +21,10 @@ async function bootstrap() {
   // Enables automatic type conversion
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      transform: true, // Transform JSON data to DTO types
+      whitelist: true, // Strip non-DTO fields
+      forbidNonWhitelisted: true, // Reject requests with extra fields
+      disableErrorMessages: false, // Ensure errors are returned
     }),
   );
 

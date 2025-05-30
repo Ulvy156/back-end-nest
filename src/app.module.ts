@@ -18,6 +18,7 @@ import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-
 import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
 import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboard.module';
 import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dashboard.module';
+import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dash
     HpoDashboardReportModule,
     LoReportDashboardModule,
     CmpReportDashboardModule,
+    LoanOvedueModule,
   ],
   controllers: [AppController],
   providers: [
