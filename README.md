@@ -1,6 +1,6 @@
 # KIVA BACK-END NEST JS
 
-A scalable server-side application built using [NestJS](https://nestjs.com/) with TypeScript, TypeORM, Passport authentication, and robust developer tooling for CI/CD, linting, formatting, and testing.
+A scalable server-side application built using [NestJS](https://nestjs.com/) with TypeScript, TypeORM, and robust developer tooling for CI/CD, linting, formatting, and testing.
 
 ---
 
