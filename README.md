@@ -24,6 +24,7 @@ A scalable server-side application built using [NestJS](https://nestjs.com/) wit
 - **TypeScript**: Strong typing and modern JS features.
 - **TypeORM**: ORM with support for MSSQL and other databases.
 - **JWT with HttpOnly**: JWT and Local authentication strategies.
+- **cookie-parser**: enable parsing cookies from front-end.
 - **Rate Limiting**: Built-in throttler.
 - **Environment Configuration**: Via dotenv and @nestjs/config.
 - **Validation**: Using class-validator and class-transformer.
