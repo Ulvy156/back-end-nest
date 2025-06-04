@@ -9,7 +9,6 @@ async function bootstrap() {
   const ip = process.env.IP ?? 'localhost';
   const port = parseInt(process.env.PORT ?? '3000');
   // Enable cookie parsing
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   app.use(cookieParser());
   //log request from user
   app.useLogger(['log', 'warn', 'error']);
