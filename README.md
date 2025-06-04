@@ -23,7 +23,7 @@ A scalable server-side application built using [NestJS](https://nestjs.com/) wit
 - **NestJS v11**: Modular and scalable Node.js framework.
 - **TypeScript**: Strong typing and modern JS features.
 - **TypeORM**: ORM with support for MSSQL and other databases.
-- **Passport.js**: JWT and Local authentication strategies.
+- **JWT with HttpOnly**: JWT and Local authentication strategies.
 - **Rate Limiting**: Built-in throttler.
 - **Environment Configuration**: Via dotenv and @nestjs/config.
 - **Validation**: Using class-validator and class-transformer.
