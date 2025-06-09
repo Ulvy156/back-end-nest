@@ -1,0 +1,75 @@
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER PROCEDURE CMLDLQ_GetContactToolsAccLO
+	-- Add the parameters for the stored procedure here
+	@iuser_id INT = NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    SELECT 
+		-- Previous Month by PAR Bucket
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'p'
+                THEN 1 ELSE 0
+            END
+        ) AS pre_acc_0_day,
+
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'p'
+                THEN l.Total_Overdue_Amt ELSE 0
+            END
+        ) AS pre_overdue_amt_0_day,
+
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'p'
+                THEN l.Overdue_Principal ELSE 0
+            END
+        ) AS pre_amt_0_day,
+
+        --Collection by PAR Bucket
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'c'
+                THEN 1 ELSE 0
+            END
+        ) AS pre_acc_0_day,
+
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'c'
+                THEN l.Total_Overdue_Amt ELSE 0
+            END
+        ) AS pre_overdue_amt_0_day,
+
+        SUM(
+            CASE
+                WHEN dbo.fn_CMLDLQ_IsInRangePAR(0,0, L.Par_Category) = 1 AND 
+                dbo.fn_CMLDLQ_MonthStatus(L.Par_Category) = 'c'
+                THEN l.Overdue_Principal ELSE 0
+            END
+        ) AS pre_amt_0_day
+
+		
+
+	FROM CMLDLQ_loan_overdue L
+	WHERE L.iuser_id = @iuser_id
+
+END
+GO
+
+
