@@ -1,9 +1,16 @@
-CREATE OR ALTER FUNCTION dbo.fn_CMLDLQ_MonthStatus
+USE [CML_Pilot]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fn_CMLDLQ_MonthStatus]    Script Date: 11-Jun-25 10:46:05 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   FUNCTION [dbo].[fn_CMLDLQ_MonthStatus]
 (
     @inputDate DATETIME
 )
 RETURNS NVARCHAR(10)
--- p = previous month, c = current month, f = next month
+-- p = previous month, c = current month
 AS
 BEGIN
     DECLARE @status NVARCHAR(10);
@@ -22,11 +29,8 @@ BEGIN
         SET @status = 'p';
     ELSE IF @inputMonthYear = @currentMonthYear
         SET @status = 'c';
-    ELSE IF @inputMonthYear = @nextMonthYear
-        SET @status = 'f';
     ELSE
-        SET @status = NULL;
+        SET @status = 'a';
 
     RETURN @status;
 END;
-GO
