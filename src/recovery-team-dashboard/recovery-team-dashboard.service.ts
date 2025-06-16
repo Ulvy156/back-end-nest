@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
+import {
+  CollectedAccBARFilter,
+  CollectedAccFilter,
+} from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 import { DataSource } from 'typeorm';
 import { RecoveryFilter } from './recovery-team-dashboard.interface';
 import { normalizeError } from 'src/common/utils/exception-utils';
@@ -11,6 +14,18 @@ export class RecoveryTeamDashboardService {
     @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
+
+  async getColltectedPARBucket(
+    filterData: CollectedAccBARFilter,
+  ): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.iuser_id}','${filterData.filterType}',${filterData.filterValue},'${filterData.inputData}',${filterData.filter_iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
 
   async getColltectedAccRecovery(filterData: CollectedAccFilter): Promise<any> {
     try {

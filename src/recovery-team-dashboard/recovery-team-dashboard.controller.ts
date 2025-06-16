@@ -1,6 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { RecoveryTeamDashboardService } from './recovery-team-dashboard.service';
-import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
+import {
+  CollectedAccBARFilter,
+  CollectedAccFilter,
+} from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 import { RecoveryFilter } from './recovery-team-dashboard.interface';
 
 @Controller('recovery-team-dashboard')
@@ -8,6 +11,15 @@ export class RecoveryTeamDashboardController {
   constructor(
     private readonly recoveryTeamDashboardService: RecoveryTeamDashboardService,
   ) {}
+
+  @Get('/collected-PAR-bucket')
+  async getColltectedPARBucket(
+    @Query() filterData: CollectedAccBARFilter,
+  ): Promise<any> {
+    return await this.recoveryTeamDashboardService.getColltectedPARBucket(
+      filterData,
+    );
+  }
 
   @Get('/collected-account')
   async getColltectedAccBranch(

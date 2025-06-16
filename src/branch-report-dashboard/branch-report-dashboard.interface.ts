@@ -11,3 +11,11 @@ export interface CollectedAccFilter {
   iuser_id: number;
   br_id: number;
 }
+
+export interface CollectedAccBARFilter {
+  iuser_id: number;
+  filterType: FilterType;
+  filterValue: string;
+  inputData: string | number;
+  filter_iuser_id: number;
+}
