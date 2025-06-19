@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetStepTakensAccROTeam]
+CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetStaffRecomsAccROTeam]
 	@filterType VARCHAR(50) = NULL, -- branch, all lro
 	@brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
 	@filter_iuser_id INT = NULL -- user id selected from @filterValue
@@ -27,20 +27,29 @@ BEGIN
 	INSERT INTO #branchIds (br_id)
 	SELECT CAST(value AS INT) FROM STRING_SPLIT(@brIds, ',');
 
-	WITH StepTakens AS (
+	WITH StaffRecommend AS (
 		SELECT 
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%verbal communication%' THEN 1 ELSE 0 END
-			) as total_communication_step_taken,
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%co-borrower%' THEN 1 ELSE 0 END
+			) as total_co_borrower,
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%remind letter%' THEN 1 ELSE 0 END
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%guarantor%' THEN 1 ELSE 0 END
+			) as total_guarantor,
+			SUM(
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%weekly follow up%' THEN 1 ELSE 0 END
+			) as total_weekly_follow_up,
+			SUM(
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%loan restructure%' THEN 1 ELSE 0 END
+			) as total_loan_restructure,
+			SUM(
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%refinancing%' THEN 1 ELSE 0 END
+			) as total_refinancing,
+			SUM(
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%remind letter-lo%' THEN 1 ELSE 0 END
 			) as total_remind_letter,
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%follow up promise%' THEN 1 ELSE 0 END
-			) as total_follow_up_promise,
-			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%invitation letter%' THEN 1 ELSE 0 END
-			) as total_invitation_letter
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%bm/hlo support%' THEN 1 ELSE 0 END
+			) as total_support
 
 		FROM CMLDLQ_loan_overdue L
 		JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
@@ -57,8 +66,8 @@ BEGIN
 	)
 		
 	SELECT *, (
-		total_communication_step_taken + total_remind_letter + total_follow_up_promise + total_invitation_letter 
+		total_co_borrower + total_guarantor + total_weekly_follow_up + total_loan_restructure + total_refinancing + total_remind_letter + total_support
 	) AS grand_total
-	FROM StepTakens;
+	FROM StaffRecommend;
 
 END

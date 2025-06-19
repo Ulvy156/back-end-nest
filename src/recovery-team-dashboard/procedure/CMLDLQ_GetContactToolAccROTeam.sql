@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetStepTakensAccROTeam]
+CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
 	@filterType VARCHAR(50) = NULL, -- branch, all lro
 	@brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
 	@filter_iuser_id INT = NULL -- user id selected from @filterValue
@@ -30,17 +30,11 @@ BEGIN
 	WITH StepTakens AS (
 		SELECT 
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%verbal communication%' THEN 1 ELSE 0 END
-			) as total_communication_step_taken,
+				CASE WHEN LOWER(L.contact_tool) LIKE '%phone call%' THEN 1 ELSE 0 END
+			) as total_phone_call,
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%remind letter%' THEN 1 ELSE 0 END
-			) as total_remind_letter,
-			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%follow up promise%' THEN 1 ELSE 0 END
-			) as total_follow_up_promise,
-			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%invitation letter%' THEN 1 ELSE 0 END
-			) as total_invitation_letter
+				CASE WHEN LOWER(L.contact_tool) LIKE '%visit partner%' THEN 1 ELSE 0 END
+			) as total_visit_partner
 
 		FROM CMLDLQ_loan_overdue L
 		JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
@@ -57,7 +51,7 @@ BEGIN
 	)
 		
 	SELECT *, (
-		total_communication_step_taken + total_remind_letter + total_follow_up_promise + total_invitation_letter 
+		total_phone_call + total_visit_partner 
 	) AS grand_total
 	FROM StepTakens;
 
