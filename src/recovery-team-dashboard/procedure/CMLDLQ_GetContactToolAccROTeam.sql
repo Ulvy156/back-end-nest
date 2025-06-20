@@ -1,6 +1,6 @@
 USE [CML_Pilot]
 GO
-/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetStepTakensAccBM]    Script Date: 17-Jun-25 9:29:45 AM ******/
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetContactToolAccROTeam]    Script Date: 20-Jun-25 2:10:51 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
+ALTER    PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
 	@filterType VARCHAR(50) = NULL, -- branch, all lro
 	@brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
 	@filter_iuser_id INT = NULL -- user id selected from @filterValue

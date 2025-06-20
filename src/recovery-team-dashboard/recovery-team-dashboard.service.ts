@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import {
-  CollectedAccBARFilter,
-  CollectedAccFilter,
-} from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 import { DataSource } from 'typeorm';
-import { RecoveryFilter } from './recovery-team-dashboard.interface';
 import { normalizeError } from 'src/common/utils/exception-utils';
+import { RecoveryFilter } from './recovery-team-dashboard.interface';
 
 @Injectable()
 export class RecoveryTeamDashboardService {
@@ -15,11 +11,9 @@ export class RecoveryTeamDashboardService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async getColltectedPARBucket(
-    filterData: CollectedAccBARFilter,
-  ): Promise<any> {
+  async getColltectedPARBucket(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.iuser_id}','${filterData.filterType}',${filterData.filterValue},'${filterData.inputData}',${filterData.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -27,9 +21,9 @@ export class RecoveryTeamDashboardService {
     }
   }
 
-  async getColltectedAccRecovery(filterData: CollectedAccFilter): Promise<any> {
+  async getColltectedAccRecovery(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAccRecovery '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAccROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -37,9 +31,9 @@ export class RecoveryTeamDashboardService {
     }
   }
 
-  async getColltectedAmtRecovery(filterData: CollectedAccFilter): Promise<any> {
+  async getColltectedAmtRecovery(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAmtRecovery '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAmtROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -51,7 +45,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetContactToolsAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetContactToolAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -63,7 +57,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetTotalStepTakenAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStepTakensAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -75,7 +69,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetTotalStaffRecommendAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStaffRecomsAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {

@@ -4,14 +4,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE OR ALTER PROCEDURE CMLDLQ_GetCollectionParBucketROTeam
-    @iuser_id INT = NULL,
-    -- user who search
     @filterType VARCHAR(50) = NULL,
-    -- branch, zone
-    @filterValue VARCHAR(50) = NULL,
-    -- br id, zone id
-    @inputData VARCHAR(50) = NULL,
-    -- value @filterValue
+    -- branch, all lro
+    @brIds VARCHAR(50) = NULL,
+    -- format must be '1,2,3'
     @filter_iuser_id INT = NULL
 -- user id selected from @filterValue
 AS
@@ -44,7 +40,7 @@ BEGIN
     WITH
         collBar
         AS
-        
+
         (
             SELECT
                 CASE 
@@ -72,12 +68,15 @@ BEGIN
             FROM CMLDLQ_loan_overdue L
                 JOIN USER_PROFILE_MST U ON U.IUSER_ID = L.iuser_id
             WHERE (
-			--filter by branch id
-			LOWER(@filterType) LIKE '%branch%'
-                AND L.branchID = @filterValue
-                AND @inputData IS NOT NULL
-                AND (L.iuser_id = @filter_iuser_id OR U.ROLE_ID = 32)
+			--filter by RO name
+			LOWER(@filterType) LIKE '%name%'
+                AND L.iuser_id = @filter_iuser_id
 		)
+                OR (
+			--filter by RO name
+			LOWER(@filterType) LIKE '%branch%' 
+		) AND L.branchID IN (SELECT br_id
+                FROM #branchIds) AND U.ROLE_ID = 32
             GROUP BY 
         CASE 
             WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'
