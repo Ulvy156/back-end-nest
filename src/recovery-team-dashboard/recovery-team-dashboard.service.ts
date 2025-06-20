@@ -13,7 +13,7 @@ export class RecoveryTeamDashboardService {
 
   async getColltectedPARBucket(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.filterType}','${filterData.brIds.join(',')}',${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -23,7 +23,7 @@ export class RecoveryTeamDashboardService {
 
   async getColltectedAccRecovery(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAccROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAccROTeam '${filterData.filterType}','${filterData.brIds.join(',')}',${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -33,7 +33,7 @@ export class RecoveryTeamDashboardService {
 
   async getColltectedAmtRecovery(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAmtROTeam '${filterData.filterType}',${filterData.brIds.join(',')},${filterData.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAmtROTeam '${filterData.filterType}','${filterData.brIds.join(',')}',${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -45,7 +45,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetContactToolAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetContactToolAccROTeam '${recoveryFilter.filterType}','${recoveryFilter.brIds.join(',')}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -57,7 +57,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetStepTakensAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStepTakensAccROTeam '${recoveryFilter.filterType}','${recoveryFilter.brIds.join(',')}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -69,7 +69,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetStaffRecomsAccROTeam '${recoveryFilter.filterType}',${recoveryFilter.brIds.join(',')},${recoveryFilter.filter_iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStaffRecomsAccROTeam '${recoveryFilter.filterType}','${recoveryFilter.brIds.join(',')}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
