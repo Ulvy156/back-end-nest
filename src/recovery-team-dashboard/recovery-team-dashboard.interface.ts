@@ -1,6 +1,6 @@
+export type FilterType = 'BRANCH' | 'LRO_NAME Name';
 export interface RecoveryFilter {
-  filterType: string;
-  inputValue: string;
-  ROName: string;
-  iuser_id: number;
+  filterType: FilterType;
+  brIds: Array<number>;
+  filter_iuser_id: number;
 }
