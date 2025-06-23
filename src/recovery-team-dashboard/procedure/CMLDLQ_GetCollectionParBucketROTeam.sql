@@ -1,15 +1,15 @@
+USE [CML_Pilot]
+GO
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectionParBucketROTeam]    Script Date: 23-Jun-25 1:54:12 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE OR ALTER PROCEDURE CMLDLQ_GetCollectionParBucketROTeam
-    @filterType VARCHAR(50) = NULL,
-    -- branch, all lro
-    @brIds VARCHAR(50) = NULL,
-    -- format must be '1,2,3'
-    @filter_iuser_id INT = NULL
--- user id selected from @filterValue
+ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketROTeam]
+    @filterType VARCHAR(50) = NULL, -- branch, all lro
+    @brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
+    @filter_iuser_id INT = NULL -- user id selected from @filterValue
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -18,24 +18,12 @@ BEGIN
     (
         br_id INT
     )
-    INSERT INTO #branchPermission
-        (br_id)
-    SELECT PERMISSION
-    FROM PERM_DTL
-    WHERE PERM_TYPE = 1004
-        AND IUSERID = @iuser_id;
-
-    --store view permission zone
-    CREATE TABLE #zonePermission
-    (
-        zone_id INT
-    )
-    INSERT INTO #branchPermission
-        (br_id)
-    SELECT PERMISSION
-    FROM PERM_DTL
-    WHERE PERM_TYPE = 1004
-        AND IUSERID = @iuser_id;
+    	--tem store convert br id
+	CREATE TABLE #branchIds (
+		br_id INT
+	)
+	INSERT INTO #branchIds (br_id)
+	SELECT CAST(value AS INT) FROM STRING_SPLIT(@brIds, ',');
 
     WITH
         collBar
@@ -94,4 +82,3 @@ BEGIN
     FROM collBar
     WHERE PAR_Category IS NOT NULL
 END
-GO

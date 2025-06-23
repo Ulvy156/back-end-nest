@@ -1,7 +1,14 @@
-CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectedAccROTeam]
-    @filterType VARCHAR(50) = NULL,
-    @brIds VARCHAR(50) = NULL,
-    @filter_iuser_id INT = NULL
+USE [CML_Pilot]
+GO
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAccROTeam]    Script Date: 23-Jun-25 4:50:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectedAccROTeam]
+    @filterType VARCHAR(50) = NULL, -- branch, all lro
+    @brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
+    @filter_iuser_id INT = NULL -- user id selected from @filterValue
 AS
 BEGIN
     SET NOCOUNT ON;
