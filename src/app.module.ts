@@ -12,7 +12,6 @@ import { BranchReportDashboardModule } from './branch-report-dashboard/branch-re
 import { ViewBranchPermissionModule } from './view-branch-permission/view-branch-permission.module';
 import { ContactAccountModule } from './contact-account/contact-account.module';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { InteractionSummaryModule } from './interaction-summary/interaction-summary.module';
 import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-team-dashboard.module';
 import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
 import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboard.module';
@@ -42,7 +41,6 @@ import { JwtMiddleware } from './middleware/jwt.middleware';
     BranchReportDashboardModule,
     ViewBranchPermissionModule,
     ContactAccountModule,
-    InteractionSummaryModule,
     RecoveryTeamDashboardModule,
     HpoDashboardReportModule,
     LoReportDashboardModule,

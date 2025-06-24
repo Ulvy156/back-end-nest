@@ -34,9 +34,7 @@ export class BranchReportDashboardService {
   //Number of Contact Accounts (Call+Visit)
   async getNumberOfContactAcc(filterData: CollectedAccFilter) {
     try {
-      filterData.br_id = filterData.br_id ?? null;
-      filterData.iuser_id = filterData.iuser_id ?? null;
-      const sql = `EXEC CMLDLQ_GetContactAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const sql = `EXEC CMLDLQ_GetContactAccBranch '${filterData.filterType}','${filterData.inputValue}', ${filterData.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -47,10 +45,7 @@ export class BranchReportDashboardService {
   //Contact Tool
   async getNumberOfContactToolAcc(filterData: CollectedAccFilter) {
     try {
-      if (!filterData.br_id) {
-        filterData.br_id = null;
-      }
-      const sql = `EXEC CMLDLQ_GetContactToolsAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const sql = `EXEC CMLDLQ_GetContactToolsAccBM '${filterData.filterType}','${filterData.inputValue}', ${filterData.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -61,10 +56,7 @@ export class BranchReportDashboardService {
   //Number of step takens Accounts
   async getNumberOfStepTakensAcc(filterData: CollectedAccFilter) {
     try {
-      if (!filterData.br_id) {
-        filterData.br_id = null;
-      }
-      const sql = `EXEC CMLDLQ_GetStepTakensAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const sql = `EXEC CMLDLQ_GetStepTakensAccBM '${filterData.filterType}','${filterData.inputValue}', ${filterData.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -75,10 +67,7 @@ export class BranchReportDashboardService {
   //Number of step takens Accounts
   async getNumberOfStaffRecommendAcc(filterData: CollectedAccFilter) {
     try {
-      if (!filterData.br_id) {
-        filterData.br_id = null;
-      }
-      const sql = `EXEC CMLDLQ_GetStaffRecommendAcc '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}, ${filterData?.br_id}`;
+      const sql = `EXEC CMLDLQ_GetStaffRecommendAccBM '${filterData.filterType}','${filterData.inputValue}', ${filterData.br_id}`;
       const result: Record<string, any> = await this.dataSource.query(sql);
       return result;
     } catch (error) {

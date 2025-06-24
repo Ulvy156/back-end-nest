@@ -27,17 +27,24 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT 
-		SUM(
-			CASE WHEN LOWER(L.communication_step_taken) LIKE '%call%' THEN 1 ELSE 0 END
-		) as totalPhoneCall,
-		SUM(
-			CASE WHEN LOWER(L.communication_step_taken) LIKE '%remind letter%' THEN 1 ELSE 0 END
-		) as totalVisitparnter
-		
+	WITH ContactToolsAcc AS (
+		SELECT 
+			SUM(
+				CASE WHEN LOWER(L.communication_step_taken) LIKE '%call%' THEN 1 ELSE 0 END
+			) as totalPhoneCall,
+			SUM(
+				CASE WHEN LOWER(L.communication_step_taken) LIKE '%remind letter%' THEN 1 ELSE 0 END
+			) as totalVisitparnter
+			
 
-	FROM CMLDLQ_loan_overdue L
-	WHERE L.iuser_id = @iuser_id
+		FROM CMLDLQ_loan_overdue L
+		WHERE L.iuser_id = @iuser_id
+	)
+
+	SELECT *, (
+		totalPhoneCall + totalVisitparnter
+	) AS grand_total
+	FROM ContactToolsAcc;
 
 END
 GO

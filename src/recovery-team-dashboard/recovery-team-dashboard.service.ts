@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { CollectedAccFilter } from 'src/branch-report-dashboard/branch-report-dashboard.interface';
 import { DataSource } from 'typeorm';
-import { RecoveryFilter } from './recovery-team-dashboard.interface';
 import { normalizeError } from 'src/common/utils/exception-utils';
-
+import { RecoveryFilter } from './recovery-team-dashboard.interface';
+import { combineBrIds } from 'src/common/utils/useCombineArray';
 @Injectable()
 export class RecoveryTeamDashboardService {
   constructor(
@@ -12,9 +11,9 @@ export class RecoveryTeamDashboardService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async getColltectedAccRecovery(filterData: CollectedAccFilter): Promise<any> {
+  async getColltectedPARBucket(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAccRecovery '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectionParBucketROTeam '${filterData.filterType}','${combineBrIds(filterData.brIds)}',${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -22,9 +21,19 @@ export class RecoveryTeamDashboardService {
     }
   }
 
-  async getColltectedAmtRecovery(filterData: CollectedAccFilter): Promise<any> {
+  async getColltectedAccRecovery(filterData: RecoveryFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAmtRecovery '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAccROTeam '${filterData.filterType}','${combineBrIds(filterData.brIds)}',${filterData.filter_iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
+
+  async getColltectedAmtRecovery(filterData: RecoveryFilter): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetCollectedAmtROTeam '${filterData.filterType}','${combineBrIds(filterData.brIds)}',${filterData.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -36,7 +45,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetContactToolsAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetContactToolAccROTeam '${recoveryFilter.filterType}','${combineBrIds(recoveryFilter.brIds)}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -48,7 +57,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetTotalStepTakenAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStepTakensAccROTeam '${recoveryFilter.filterType}','${combineBrIds(recoveryFilter.brIds)}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -60,7 +69,7 @@ export class RecoveryTeamDashboardService {
     recoveryFilter: RecoveryFilter,
   ): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetTotalStaffRecommendAccRecoveryDB '${recoveryFilter.filterType}','${recoveryFilter.inputValue}','${recoveryFilter.ROName}',${recoveryFilter.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetStaffRecomsAccROTeam '${recoveryFilter.filterType}','${combineBrIds(recoveryFilter.brIds)}',${recoveryFilter.filter_iuser_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {

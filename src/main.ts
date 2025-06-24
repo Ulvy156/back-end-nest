@@ -2,9 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import * as qs from 'qs';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // Override Express query parser
+  (app.getHttpAdapter().getInstance() as express.Express).set(
+    'query parser',
+    (str) => qs.parse(str),
+  );
   // Load .env properties
   const ip = process.env.IP ?? 'localhost';
   const port = parseInt(process.env.PORT ?? '3000');
