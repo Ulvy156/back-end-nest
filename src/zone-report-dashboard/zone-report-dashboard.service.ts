@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { CreateZoneReportDashboardDto } from './dto/create-zone-report-dashboard.dto';
-import { UpdateZoneReportDashboardDto } from './dto/update-zone-report-dashboard.dto';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { normalizeError } from 'src/common/utils/exception-utils';
+import { DataSource } from 'typeorm';
+import { CollectedAccFilter } from './zone-report.interface';
 
 @Injectable()
 export class ZoneReportDashboardService {
-  create(createZoneReportDashboardDto: CreateZoneReportDashboardDto) {
-    return 'This action adds a new zoneReportDashboard';
+  constructor(
+    @InjectDataSource()
+    private readonly dataSource: DataSource, // Replace 'any' with the actual type if known
+  ) {}
+
+  async getContactToolZone(filterData: CollectedAccFilter): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetCollectedAccBranch '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all zoneReportDashboard`;
+  async getStepTakensZone(filterData: CollectedAccFilter): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetCollectedAmtBranch '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} zoneReportDashboard`;
-  }
-
-  update(id: number, updateZoneReportDashboardDto: UpdateZoneReportDashboardDto) {
-    return `This action updates a #${id} zoneReportDashboard`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} zoneReportDashboard`;
+  async getStaffRecommendZone(filterData: CollectedAccFilter): Promise<any> {
+    try {
+      const sql = `EXEC CMLDLQ_GetCollectedAmtBranch '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const result: Record<string, any>[] = await this.dataSource.query(sql);
+      return result;
+    } catch (error) {
+      throw normalizeError(error);
+    }
   }
 }

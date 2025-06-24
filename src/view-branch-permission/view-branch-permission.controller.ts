@@ -20,4 +20,9 @@ export class ViewBranchPermissionController {
   async getBrnachByBrID(@Param('iuser_id') iuser_id: number) {
     return await this.viewBranchPermissionService.getBrnachByBrID(+iuser_id);
   }
+
+  @Get('/zone')
+  async fetchBranchesByZone(): Promise<any> {
+    return this.viewBranchPermissionService.fetchBranchesByZone();
+  }
 }

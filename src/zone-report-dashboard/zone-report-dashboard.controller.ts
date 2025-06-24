@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ZoneReportDashboardService } from './zone-report-dashboard.service';
-import { CreateZoneReportDashboardDto } from './dto/create-zone-report-dashboard.dto';
-import { UpdateZoneReportDashboardDto } from './dto/update-zone-report-dashboard.dto';
+import { CollectedAccFilter } from './zone-report.interface';
 
 @Controller('zone-report-dashboard')
 export class ZoneReportDashboardController {
-  constructor(private readonly zoneReportDashboardService: ZoneReportDashboardService) {}
+  constructor(
+    private readonly zoneReportDashboardService: ZoneReportDashboardService,
+  ) {}
 
-  @Post()
-  create(@Body() createZoneReportDashboardDto: CreateZoneReportDashboardDto) {
-    return this.zoneReportDashboardService.create(createZoneReportDashboardDto);
+  @Get('/contact-tool')
+  async getContactToolZone(
+    @Query() filterData: CollectedAccFilter,
+  ): Promise<any> {
+    return await this.zoneReportDashboardService.getContactToolZone(filterData);
   }
 
-  @Get()
-  findAll() {
-    return this.zoneReportDashboardService.findAll();
+  @Get('/step-takens')
+  async getStepTakensZone(
+    @Query() filterData: CollectedAccFilter,
+  ): Promise<any> {
+    return await this.zoneReportDashboardService.getStepTakensZone(filterData);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.zoneReportDashboardService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateZoneReportDashboardDto: UpdateZoneReportDashboardDto) {
-    return this.zoneReportDashboardService.update(+id, updateZoneReportDashboardDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.zoneReportDashboardService.remove(+id);
+  @Get('/staff-recommend')
+  async getStaffRecommendZone(
+    @Query() filterData: CollectedAccFilter,
+  ): Promise<any> {
+    return await this.zoneReportDashboardService.getStaffRecommendZone(
+      filterData,
+    );
   }
 }
