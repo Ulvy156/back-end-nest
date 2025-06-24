@@ -19,6 +19,7 @@ import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dash
 import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 import { JwtConfig } from './config/jwtConfig';
 import { JwtMiddleware } from './middleware/jwt.middleware';
+import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-dashboard.module';
 @Module({
   imports: [
     JwtConfig,
@@ -46,6 +47,7 @@ import { JwtMiddleware } from './middleware/jwt.middleware';
     LoReportDashboardModule,
     CmpReportDashboardModule,
     LoanOvedueModule,
+    ZoneReportDashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
