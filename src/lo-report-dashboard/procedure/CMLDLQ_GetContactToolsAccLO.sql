@@ -1,14 +1,6 @@
--- ================================================
--- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the procedure.
--- ================================================
+USE [CML_Pilot]
+GO
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetContactToolsAccLO]    Script Date: 25-Jun-25 9:28:46 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER PROCEDURE CMLDLQ_GetContactToolsAccLO
+ALTER   PROCEDURE [dbo].[CMLDLQ_GetContactToolsAccLO]
 	-- Add the parameters for the stored procedure here
 	@iuser_id INT = NULL
 AS
@@ -30,11 +22,11 @@ BEGIN
 	WITH ContactToolsAcc AS (
 		SELECT 
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%call%' THEN 1 ELSE 0 END
-			) as totalPhoneCall,
+				CASE WHEN LOWER(L.contact_tool) LIKE '%call%' THEN 1 ELSE 0 END
+			) as total_phone_call,
 			SUM(
-				CASE WHEN LOWER(L.communication_step_taken) LIKE '%remind letter%' THEN 1 ELSE 0 END
-			) as totalVisitparnter
+				CASE WHEN LOWER(L.contact_tool) LIKE '%remind letter%' THEN 1 ELSE 0 END
+			) as total_visit_partner
 			
 
 		FROM CMLDLQ_loan_overdue L
@@ -42,9 +34,8 @@ BEGIN
 	)
 
 	SELECT *, (
-		totalPhoneCall + totalVisitparnter
+		total_phone_call + total_visit_partner
 	) AS grand_total
 	FROM ContactToolsAcc;
 
 END
-GO
