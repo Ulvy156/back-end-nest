@@ -40,6 +40,7 @@ BEGIN
             dbo.fn_CMLDLQ_IsInRangePAR(30, 59, L.Par_Category) = 1 OR
             dbo.fn_CMLDLQ_IsInRangePAR(60, 89, L.Par_Category) = 1
           )
+    AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
     GROUP BY 
         CASE 
             WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'

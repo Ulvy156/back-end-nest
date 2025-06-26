@@ -1,6 +1,7 @@
 CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectedAmtROTeam]
     @filterType VARCHAR(50) = NULL,
     @brIds VARCHAR(50) = NULL,
+    @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL
 AS
 BEGIN
@@ -8,9 +9,28 @@ BEGIN
 
     CREATE TABLE #branchIds (br_id INT);
 
-    INSERT INTO #branchIds (br_id)
-    SELECT CAST(value AS INT)
-    FROM STRING_SPLIT(@brIds, ',');
+    -- Fill #branchIds based on zone or input
+    IF LOWER(@filterType) = 'zone'
+    BEGIN
+        INSERT INTO #branchIds (br_id)
+        SELECT B.IBR_ID
+        FROM PERM_DTL P
+        JOIN BRANCH_MST B ON B.IBR_ID = P.PERMISSION
+        WHERE P.PERM_TYPE = 1004
+          AND (
+              (LOWER(@zone_name) = 'pnp' AND P.IUSERID = 1747) OR
+              (LOWER(@zone_name) = 'srp' AND P.IUSERID = 1052) OR
+              (LOWER(@zone_name) = 'btb' AND P.IUSERID = 1522)
+          );
+    END
+    ELSE IF LOWER(@filterType) = 'branch'
+    BEGIN
+        INSERT INTO #branchIds (br_id)
+        SELECT TRY_CAST(value AS INT)
+        FROM STRING_SPLIT(@brIds, ',')
+        WHERE ISNUMERIC(value) = 1;
+    END
+
 
     SELECT
         U.IUSER_ID,
@@ -62,9 +82,13 @@ BEGIN
     JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
     WHERE (
         (LOWER(@filterType) = 'name' AND L.iuser_id = @filter_iuser_id)
-        OR
-        (LOWER(@filterType) = 'branch' AND L.branchID IN (SELECT br_id FROM #branchIds))
+        OR (
+			--filter by 'branch', 'zone'
+			LOWER(@filterType) IN ('branch', 'zone') AND 
+            L.branchID IN (SELECT br_id FROM #branchIds) 
+		)
     )
+    AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
     AND U.ROLE_ID = 32
     GROUP BY U.IUSER_ID, U.NAME
     ORDER BY U.NAME

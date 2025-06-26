@@ -1,31 +1,16 @@
-USE [CML_Pilot]
-GO
-/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetStepTakensAccBM]    Script Date: 17-Jun-25 9:29:45 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetStaffRecomsAccROTeam]
-	@filterType VARCHAR(50) = NULL, -- branch, all lro
-	@brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
-	@zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
-	@filter_iuser_id INT = NULL -- user id selected from @filterValue
+CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetStaffRecommendAccZone]
+    @filterType VARCHAR(50) = NULL,      -- 'zone', 'branch', 'name'
+    @brIds VARCHAR(50) = NULL,           -- '1,2,3' format
+    @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
+    @filter_iuser_id INT = NULL          -- user id
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
-	--tem store convert br id
-	CREATE TABLE #branchIds (
-		br_id INT
-	)
-	-- Fill #branchIds based on zone or input
+    -- Create temp table to hold branch IDs
+    CREATE TABLE #branchIds (br_id INT);
+
+    -- Fill #branchIds based on zone or input
     IF LOWER(@filterType) = 'zone'
     BEGIN
         INSERT INTO #branchIds (br_id)
@@ -47,9 +32,11 @@ BEGIN
         WHERE ISNUMERIC(value) = 1;
     END
 
-	;WITH StaffRecommend AS (
-		SELECT 
-			SUM(
+    -- Main query logic
+    ;WITH StepTakens AS (
+        SELECT 
+            B.BR_CD,
+            SUM(
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%co-borrower%' THEN 1 ELSE 0 END
 			) as total_contact_co_borrower,
 			SUM(
@@ -74,25 +61,26 @@ BEGIN
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%bm/hlo support%' THEN 1 ELSE 0 END
 			) as total_request_bm_hlo_support
 
-		FROM CMLDLQ_loan_overdue L
-		JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
-		WHERE (
-			--filter by RO name
-			LOWER(@filterType) LIKE '%name%' 
-			AND L.iuser_id = @filter_iuser_id
-		) 
-		OR (
-			--filter by 'branch', 'zone'
-			LOWER(@filterType) IN ('branch', 'zone') AND 
+        FROM CMLDLQ_loan_overdue L
+        JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
+        JOIN BRANCH_MST B ON B.IBR_ID = L.branchID
+        WHERE (
+            LOWER(@filterType) LIKE '%name%' AND L.iuser_id = @filter_iuser_id
+        ) OR (
+            LOWER(@filterType) IN ('branch', 'zone') AND 
             L.branchID IN (SELECT br_id FROM #branchIds) 
-		) AND U.ROLE_ID = 32
-		AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
+        ) OR (
+			LOWER(@filterType) LIKE '%recovery%' AND L.iuser_id = @filter_iuser_id 
+		)
+        AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
+        
+        GROUP BY B.BR_CD
+    )
 
-	)
-		
-	SELECT *, (
-		total_contact_co_borrower + total_contact_guarantor + total_weekly_follow_up + total_loan_restructure + total_refinancing + total_remind_letter + total_request_bm_hlo_support
-	) AS grand_total
-	FROM StaffRecommend;
+    SELECT *,
+        total_contact_co_borrower + total_contact_guarantor + total_invitation_letter_ro + total_weekly_follow_up
+		+ total_loan_restructure + total_refinancing + total_remind_letter + total_request_bm_hlo_support AS grand_total
+    FROM StepTakens;
 
+    DROP TABLE #branchIds;
 END

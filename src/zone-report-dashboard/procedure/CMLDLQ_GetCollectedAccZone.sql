@@ -1,11 +1,11 @@
 USE [CML_Pilot]
 GO
-/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAccROTeam]    Script Date: 23-Jun-25 4:50:31 PM ******/
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAccZone]    Script Date: 23-Jun-25 4:50:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectedAccROTeam]
+CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetCollectedAccZone]
     @filterType VARCHAR(50) = NULL, -- branch, all lro
     @brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
@@ -39,53 +39,45 @@ BEGIN
     END
 
     SELECT
-        U.IUSER_ID,
-        U.NAME,
+        B.BR_CD,
 
         -- Pending groupings
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 89, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS p60_89days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS p0days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(90, 180, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS p90_180days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS p1_29days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(180, 360, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS p180_360days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS p30_59days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(360, 0, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS p360_plus_days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS p60_plus_days,
 
-        -- Collected groupings
+        -- Current groupings
         SUM(CASE 
             WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1
             THEN 1 ELSE 0 END) AS c0days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 60, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS c_less_60days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS c1_29days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 89, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS c60_89days,
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS c30_59days,
 
         SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(90, 180, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS c90_180days,
-
-        SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(180, 360, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS c180_360days,
-
-        SUM(CASE 
-            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(360, 0, L.Par_Category) = 1
-            THEN 1 ELSE 0 END) AS c360_plus_days
+            WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, L.Par_Category) = 1
+            THEN 1 ELSE 0 END) AS c60_plusdays
 
     FROM CMLDLQ_loan_overdue L
     JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
+	JOIN BRANCH_MST B ON B.IBR_ID = L.branchID
     WHERE (
         (LOWER(@filterType) = 'name' AND L.iuser_id = @filter_iuser_id)
         OR (
@@ -96,8 +88,8 @@ BEGIN
     )
     AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
     AND U.ROLE_ID = 32
-    GROUP BY U.IUSER_ID, U.NAME
-    ORDER BY U.NAME
+    GROUP BY B.BR_CD
+    ORDER BY B.BR_CD
 
     DROP TABLE #branchIds
 END

@@ -1,6 +1,6 @@
-ALTER PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
+CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetContactToolAccZone]
     @filterType VARCHAR(50) = NULL,      -- 'zone', 'branch', 'name'
-    @brIds VARCHAR(50) = NULL,           -- '1,2,3'
+    @brIds VARCHAR(50) = NULL,           -- '1,2,3' format
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL          -- user id
 AS
@@ -45,11 +45,12 @@ BEGIN
             LOWER(@filterType) LIKE '%name%' AND L.iuser_id = @filter_iuser_id
         ) OR (
             LOWER(@filterType) IN ('branch', 'zone') AND 
-            L.branchID IN (SELECT br_id FROM #branchIds) AND 
-            U.ROLE_ID = 32
+            L.branchID IN (SELECT br_id FROM #branchIds) 
         ) OR (
-			LOWER(@filterType) LIKE '%recovery%' AND L.iuser_id = @filter_iuser_id AND U.ROLE_ID = 32
+			LOWER(@filterType) LIKE '%recovery%' AND L.iuser_id = @filter_iuser_id 
 		)
+        AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
+        
         GROUP BY B.BR_CD
     )
 

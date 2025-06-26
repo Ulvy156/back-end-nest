@@ -47,6 +47,7 @@ BEGIN
 			(LOWER(@filterType) LIKE '%all lro%' AND U.ROLE_ID = 32) OR
 			(LOWER(@filterType) LIKE '%all staffs%' AND U.IBR_ID = L.branchID)
 		)
+		AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
 	)
 		
 	SELECT *, (
