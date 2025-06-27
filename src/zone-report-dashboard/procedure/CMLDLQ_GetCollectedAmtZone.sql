@@ -82,7 +82,10 @@ BEGIN
 		(
 			--filter by RO name
 			LOWER(@filterType) LIKE '%recovery team%'
-            AND U.ROLE_ID = 32 AND L.iuser_id = @filter_iuser_id
+            AND U.ROLE_ID = 32 AND (
+                L.iuser_id = @filter_iuser_id OR
+                @filter_iuser_id = 0
+            )
 		)
         OR (
 			--filter by 'branch', 'zone'
@@ -91,7 +94,7 @@ BEGIN
 		)
 	)
     AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
-    AND U.ROLE_ID = 32
+
     GROUP BY B.BR_CD
     ORDER BY B.BR_CD
 

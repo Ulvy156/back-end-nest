@@ -61,7 +61,7 @@ BEGIN
 		WHERE (
 			(
 			--filter by RO name
-			LOWER(@filterType) LIKE '%name%' 
+			LOWER(@filterType) LIKE '%recovery team%'
 			AND L.iuser_id = @filter_iuser_id
 			) 
 			OR (
