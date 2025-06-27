@@ -8,7 +8,7 @@ import { combineBrIds } from 'src/common/utils/useCombineArray';
 export class ZoneReportDashboardService {
   constructor(
     @InjectDataSource()
-    private readonly dataSource: DataSource, // Replace 'any' with the actual type if known
+    private readonly dataSource: DataSource,
   ) {}
 
   async getContactToolZone(filterData: ZoneFilter): Promise<any> {

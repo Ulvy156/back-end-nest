@@ -76,16 +76,18 @@ BEGIN
             FROM CMLDLQ_loan_overdue L
                 JOIN USER_PROFILE_MST U ON U.IUSER_ID = L.iuser_id
             WHERE (
-                --filter by RO name
-                LOWER(@filterType) LIKE '%name%'
-                    AND L.iuser_id = @filter_iuser_id
+                    (
+                    --filter by RO name
+                    LOWER(@filterType) LIKE '%name%'
+                        AND L.iuser_id = @filter_iuser_id
+                )
+                OR (
+                    --filter by 'branch', 'zone'
+                    LOWER(@filterType) IN ('branch', 'zone') AND 
+                    L.branchID IN (SELECT br_id FROM #branchIds) 
+                ) 
             )
-            OR (
-                --filter by 'branch', 'zone'
-                LOWER(@filterType) IN ('branch', 'zone') AND 
-                L.branchID IN (SELECT br_id FROM #branchIds) 
-            )  AND  U.ROLE_ID = 32
-            AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
+            AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')  AND  U.ROLE_ID = 32
             GROUP BY 
         CASE 
             WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'

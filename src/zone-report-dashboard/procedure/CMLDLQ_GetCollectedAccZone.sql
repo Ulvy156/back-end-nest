@@ -79,13 +79,17 @@ BEGIN
     JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
 	JOIN BRANCH_MST B ON B.IBR_ID = L.branchID
     WHERE (
-        (LOWER(@filterType) = 'name' AND L.iuser_id = @filter_iuser_id)
+		(
+			--filter by RO name
+			LOWER(@filterType) LIKE '%recovery team%'
+            AND U.ROLE_ID = 32
+		)
         OR (
 			--filter by 'branch', 'zone'
-			LOWER(@filterType) IN ('branch', 'zone') AND 
+			LOWER(@filterType) IN ('branch', 'zone') AND
             L.branchID IN (SELECT br_id FROM #branchIds) 
 		)
-    )
+	)
     AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
     AND U.ROLE_ID = 32
     GROUP BY B.BR_CD
