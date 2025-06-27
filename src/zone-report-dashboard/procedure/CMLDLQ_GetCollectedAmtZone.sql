@@ -82,7 +82,7 @@ BEGIN
 		(
 			--filter by RO name
 			LOWER(@filterType) LIKE '%recovery team%'
-            AND U.ROLE_ID = 32
+            AND U.ROLE_ID = 32 AND L.iuser_id = @filter_iuser_id
 		)
         OR (
 			--filter by 'branch', 'zone'
