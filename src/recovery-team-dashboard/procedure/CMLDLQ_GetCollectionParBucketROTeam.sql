@@ -79,7 +79,10 @@ BEGIN
                     (
                     --filter by RO name
                     LOWER(@filterType) LIKE '%recovery team%'
-                        AND L.iuser_id = @filter_iuser_id
+                        AND (
+                            L.iuser_id = @filter_iuser_id OR
+                            @filter_iuser_id = 0
+                        )
                 )
                 OR (
                     --filter by 'branch', 'zone'

@@ -60,9 +60,12 @@ BEGIN
 		JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
 		WHERE (
 			(
-			--filter by RO name
-			LOWER(@filterType) LIKE '%recovery team%'
-			AND L.iuser_id = @filter_iuser_id
+				--filter by RO name
+				LOWER(@filterType) LIKE '%recovery team%'
+				AND (
+					L.iuser_id = @filter_iuser_id OR
+					@filter_iuser_id = 0
+				)
 			) 
 			OR (
 				--filter by 'branch', 'zone'
