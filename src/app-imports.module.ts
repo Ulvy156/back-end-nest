@@ -1,11 +1,11 @@
 // src/app-imports.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { AppConfigModule } from './config/config.module';
 import ormconfig from 'ormconfig';
 import { AppThrottlerModule } from './throttler/throttler.module';
 import { JwtConfig } from './config/jwtConfig';
-
+console.log('ORM CONFIG', ormconfig);
 // All feature modules
 import { LoanDelinquencyModule } from './loan-delinquency/loan-delinquency.module';
 import { CmlUserModule } from './cml-user/cml-user.module';
@@ -20,18 +20,12 @@ import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboa
 import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dashboard.module';
 import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-dashboard.module';
-
 @Module({
   imports: [
+    AppConfigModule,
     JwtConfig,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      cache: true,
-      envFilePath: '.env.development',
-    }),
     AppThrottlerModule,
     TypeOrmModule.forRoot(ormconfig),
-
     // Grouped features
     LoanDelinquencyModule,
     CmlUserModule,
