@@ -47,26 +47,5 @@ import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-d
     LoanOvedueModule,
     ZoneReportDashboardModule,
   ],
-  exports: [
-    JwtConfig,
-    AppThrottlerModule,
-    TypeOrmModule,
-    ConfigModule,
-
-    // Export feature modules in case others need them
-    LoanDelinquencyModule,
-    CmlUserModule,
-    NotificationsModule,
-    LocationsModule,
-    BranchReportDashboardModule,
-    ViewBranchPermissionModule,
-    ContactAccountModule,
-    RecoveryTeamDashboardModule,
-    HpoDashboardReportModule,
-    LoReportDashboardModule,
-    CmpReportDashboardModule,
-    LoanOvedueModule,
-    ZoneReportDashboardModule,
-  ],
 })
 export class AppImportsModule {}
