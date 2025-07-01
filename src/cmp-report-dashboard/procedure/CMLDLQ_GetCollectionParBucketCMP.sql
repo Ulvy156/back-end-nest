@@ -19,7 +19,7 @@ BEGIN
     (
         br_id INT
     )
-    	--tem store convert br id
+    --tem store convert br id
 	CREATE TABLE #branchIds (
 		br_id INT
 	)
@@ -52,15 +52,15 @@ BEGIN
         (
             SELECT
                 CASE 
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(1, 29, L.Par_Category) = 1 THEN '1-29 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(30, 59, L.Par_Category) = 1 THEN '30-59 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(60, 89, L.Par_Category) = 1 THEN '60-89 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(90, 180, L.Par_Category) = 1 THEN '90-180 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(180, 360, L.Par_Category) = 1 THEN '180-360 days'
-            WHEN dbo.fn_CMLDLQ_IsInRangePAR(360, 0, L.Par_Category) = 1 THEN '360+ days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(1, 29, L.Par_Category) = 1 THEN '1-29 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(30, 59, L.Par_Category) = 1 THEN '30-59 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(60, 89, L.Par_Category) = 1 THEN '60-89 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(90, 180, L.Par_Category) = 1 THEN '90-180 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(180, 360, L.Par_Category) = 1 THEN '180-360 days'
+                    WHEN dbo.fn_CMLDLQ_IsInRangePAR(360, 0, L.Par_Category) = 1 THEN '360+ days'
 
-        END AS PAR_Category,
+                END AS PAR_Category,
 
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN 1 ELSE 0 END) AS PAccount,
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Total_Overdue_Amt ELSE 0 END) AS P_PIM_Amt,
