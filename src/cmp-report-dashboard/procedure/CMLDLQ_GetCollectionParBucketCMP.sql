@@ -62,16 +62,16 @@ BEGIN
 
                 END AS PAR_Category,
 
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN 1 ELSE 0 END) AS PAccount,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Total_Overdue_Amt ELSE 0 END) AS P_PIM_Amt,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Balance_Amt ELSE 0 END) AS PAmount,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.contact_date) = 'p' THEN 1 ELSE 0 END) AS PAccount,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.contact_date) = 'p' THEN l.Total_Overdue_Amt ELSE 0 END) AS P_PIM_Amt,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.contact_date) = 'p' THEN l.Balance_Amt ELSE 0 END) AS PAmount,
 		
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN 1 ELSE 0 END) AS ColAccount,
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN l.Total_Overdue_Amt ELSE 0 END) AS Col_PIM_Amt,
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN l.Balance_Amt ELSE 0 END) AS ColAmount,
 
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' THEN 1 ELSE 0 END) AS CuAccount,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' THEN l.Balance_Amt ELSE 0 END) AS CuAmount
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.contact_date) = 'c' THEN 1 ELSE 0 END) AS CuAccount,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.contact_date) = 'c' THEN l.Balance_Amt ELSE 0 END) AS CuAmount
 
             FROM CMLDLQ_loan_overdue L
                 JOIN USER_PROFILE_MST U ON U.IUSER_ID = L.iuser_id
