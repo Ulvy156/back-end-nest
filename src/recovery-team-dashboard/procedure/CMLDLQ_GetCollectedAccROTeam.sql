@@ -6,8 +6,8 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectedAccROTeam]
-    @filterType VARCHAR(50) = NULL, -- branch, all lro
-    @brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
+    @filterType VARCHAR(200) = NULL, -- branch, all lro
+    @brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL -- user id selected from @filterValue
 AS

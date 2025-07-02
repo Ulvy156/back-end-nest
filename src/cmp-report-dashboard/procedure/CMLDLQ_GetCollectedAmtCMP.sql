@@ -6,8 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectedAmtCMP]
-    @filterType VARCHAR(50) = NULL, -- 'branch', 'zone', 'recovery team'
-    @brIds VARCHAR(50) = NULL, -- format: '1,2,3'
+    @filterType VARCHAR(200) = NULL, -- 'branch', 'zone', 'recovery team'
+    @brIds VARCHAR(200) = NULL, -- format: '1,2,3'
     @zone_name VARCHAR(10) = NULL, -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL -- user ID for recovery team filter
 AS

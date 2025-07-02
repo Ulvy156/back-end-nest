@@ -7,8 +7,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketCMP]
-    @filterType VARCHAR(50) = NULL, -- branch, all lro
-    @brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
+    @filterType VARCHAR(200) = NULL, -- branch, all lro
+    @brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL -- user id selected from @filterValue
 AS
@@ -64,14 +64,14 @@ BEGIN
 
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN 1 ELSE 0 END) AS PAccount,
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Total_Overdue_Amt ELSE 0 END) AS P_PIM_Amt,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Overdue_Principal ELSE 0 END) AS PAmount,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'p' THEN l.Balance_Amt ELSE 0 END) AS PAmount,
 		
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN 1 ELSE 0 END) AS ColAccount,
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN l.Total_Overdue_Amt ELSE 0 END) AS Col_PIM_Amt,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN l.Overdue_Principal ELSE 0 END) AS ColAmount,
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(NULL) = 'a' THEN l.Balance_Amt ELSE 0 END) AS ColAmount,
 
 			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' THEN 1 ELSE 0 END) AS CuAccount,
-			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' THEN l.Overdue_Principal ELSE 0 END) AS CuAmount
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(L.created_at) = 'c' THEN l.Balance_Amt ELSE 0 END) AS CuAmount
 
             FROM CMLDLQ_loan_overdue L
                 JOIN USER_PROFILE_MST U ON U.IUSER_ID = L.iuser_id
@@ -81,7 +81,7 @@ BEGIN
                     LOWER(@filterType) LIKE '%recovery team%'
                         AND (
                             L.iuser_id = @filter_iuser_id OR
-                            @filter_iuser_id = 0
+                            @filter_iuser_id = 0 AND  U.ROLE_ID = 32
                         )
                 )
                 OR (
@@ -90,7 +90,7 @@ BEGIN
                     L.branchID IN (SELECT br_id FROM #branchIds) 
                 ) 
             )
-            AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')  AND  U.ROLE_ID = 32
+            AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')  
             GROUP BY 
         CASE 
             WHEN dbo.fn_CMLDLQ_IsInRangePAR(0, 0, L.Par_Category) = 1 THEN '0 days'

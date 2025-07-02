@@ -1,6 +1,6 @@
 CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetContactToolAccZone]
-    @filterType VARCHAR(50) = NULL,      -- 'zone', 'branch', 'name'
-    @brIds VARCHAR(50) = NULL,           -- '1,2,3' format
+    @filterType VARCHAR(200) = NULL,      -- 'zone', 'branch', 'name'
+    @brIds VARCHAR(200) = NULL,           -- '1,2,3' format
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL          -- user id
 AS

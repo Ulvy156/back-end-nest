@@ -1,6 +1,6 @@
 CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectedAmtROTeam]
-    @filterType VARCHAR(50) = NULL,
-    @brIds VARCHAR(50) = NULL,
+    @filterType VARCHAR(200) = NULL,
+    @brIds VARCHAR(200) = NULL,
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
     @filter_iuser_id INT = NULL
 AS
