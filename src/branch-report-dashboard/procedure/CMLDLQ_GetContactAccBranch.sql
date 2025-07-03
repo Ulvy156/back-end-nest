@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER   PROCEDURE [dbo].[CMLDLQ_GetContactAccBranch]
+CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetContactAccBranch]
     @filterType VARCHAR(20) = 'all staffs',
     @filterData VARCHAR(20) = NULL,
     @ibr_id INT = NULL

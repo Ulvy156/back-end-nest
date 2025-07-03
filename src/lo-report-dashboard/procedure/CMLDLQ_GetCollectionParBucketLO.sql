@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketLO]
+CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketLO]
     @iuser_id INT = NULL
 AS
 BEGIN

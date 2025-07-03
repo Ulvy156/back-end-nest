@@ -17,14 +17,14 @@ export class CmpReportDashboardController {
     );
   }
 
-  @Get('/collected-account')
+  @Get('/account-loan')
   async getCollectedAccountCMP(@Query() filterData: CMP_Filter): Promise<any> {
     return await this.cmpReportDashboardService.getCollectedAccountCMP(
       filterData,
     );
   }
 
-  @Get('/collected-amount')
+  @Get('/volume-loan')
   async getCollectedAmountCMP(@Query() filterData: CMP_Filter): Promise<any> {
     return await this.cmpReportDashboardService.getCollectedAmountCMP(
       filterData,

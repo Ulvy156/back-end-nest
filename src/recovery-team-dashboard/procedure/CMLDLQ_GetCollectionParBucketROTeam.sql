@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketROTeam]
+CREATE OR ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketROTeam]
     @filterType VARCHAR(200) = NULL, -- branch, all lro
     @brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'

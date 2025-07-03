@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-ALTER    PROCEDURE [dbo].[CMLDLQ_GetStepTakensAccBM]
+CREATE OR ALTER    PROCEDURE [dbo].[CMLDLQ_GetStepTakensAccBM]
     @filterType VARCHAR(20) = 'ALL STAFFS',
     @filterData VARCHAR(20) = NULL,
     @ibr_id INT = NULL,

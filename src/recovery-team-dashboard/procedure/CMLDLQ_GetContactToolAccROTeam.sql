@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-ALTER    PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
+CREATE OR ALTER    PROCEDURE [dbo].[CMLDLQ_GetContactToolAccROTeam]
 	@filterType VARCHAR(200) = NULL, -- branch, all lro
 	@brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
 	@zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'

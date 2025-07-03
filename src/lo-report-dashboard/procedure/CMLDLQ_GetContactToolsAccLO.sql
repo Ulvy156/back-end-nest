@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-ALTER   PROCEDURE [dbo].[CMLDLQ_GetContactToolsAccLO]
+CREATE OR ALTER   PROCEDURE [dbo].[CMLDLQ_GetContactToolsAccLO]
 	-- Add the parameters for the stored procedure here
 	@iuser_id INT = NULL
 AS
