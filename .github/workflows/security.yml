@@ -33,9 +33,6 @@ jobs:
     - name: Run static code analysis (ESLint)
       run: npm run lint
 
-    - name: Run format code
-      run: npm run format
-
     - name: Run npm audit for vulnerabilities
       run: npm audit --audit-level=moderate || true
 
