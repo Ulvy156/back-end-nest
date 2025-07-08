@@ -94,16 +94,16 @@ BEGIN
         ZoneName,
 
         -- Previous
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS p0days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) AS p1_29days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) AS p30_59days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS p60_plus_days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS p0days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) AS p1_29days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) AS p30_59days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS p60_plus_days,
 
         -- Current
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c0days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) AS c1_29days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) AS c30_59days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c60_plusdays
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c0days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) AS c1_29days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) AS c30_59days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c60_plusdays
 
     FROM ZoneLabeled
     
