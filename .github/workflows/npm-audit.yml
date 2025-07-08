@@ -2,9 +2,11 @@ name: NPM Audit and Dependency Review
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - '**'
   pull_request:
-    branches: ['main']
+    branches:
+      - '**'
 
 jobs:
   npm-audit:
