@@ -1,16 +1,16 @@
-name: CodeQL Security Scan
+name: 🔒 Full Security Check
 
 on:
   push:
-    branches: ['master']
+    branches: ['main']
   pull_request:
-    branches: ['master']
+    branches: ['main']
   schedule:
-    - cron: '0 0 * * 0' # every Sunday
+    - cron: '0 0 * * 0' # Every Sunday @ 00:00 UTC
 
 jobs:
-  analyze:
-    name: Analyze with CodeQL
+  codeql:
+    name: 🔍 CodeQL Static Analysis
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -23,18 +23,44 @@ jobs:
         language: [javascript, typescript]
 
     steps:
-      - name: ⬇️ Checkout repository
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 
-      - name: 📥 Initialize CodeQL
+      - name: 📦 Install deps
+        run: npm ci
+
+      - name: 📥 Init CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
-      - name: 🛠️ Build app (required for analysis)
-        run: |
-          npm install
-          npm run build
+      - name: 🛠️ Build (required for scan)
+        run: npm run build
 
-      - name: 🔍 Perform CodeQL Analysis
+      - name: 🔎 Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
+
+  npm-audit:
+    name: 🚨 NPM Dependency Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📦 Install deps
+        run: npm ci
+
+      - name: 🔐 Run npm audit
+        run: npm audit --audit-level=high --production
+
+  dependency-review:
+    name: 📦 Dependency Review (only on PR)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/dependency-review-action@v3
