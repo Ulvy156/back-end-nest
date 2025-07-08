@@ -11,8 +11,9 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 CREATE OR ALTER  PROCEDURE [dbo].[CMLDLQ_GetStaffRecomsAccROTeam]
-	@filterType VARCHAR(50) = NULL, -- branch, all lro
-	@brIds VARCHAR(50) = NULL, -- format must be '1,2,3'
+	@filterType VARCHAR(200) = NULL, -- branch, all lro
+	@brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
+	@zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
 	@filter_iuser_id INT = NULL -- user id selected from @filterValue
 AS
 BEGIN
@@ -24,17 +25,39 @@ BEGIN
 	CREATE TABLE #branchIds (
 		br_id INT
 	)
-	INSERT INTO #branchIds (br_id)
-	SELECT CAST(value AS INT) FROM STRING_SPLIT(@brIds, ',');
+	-- Fill #branchIds based on zone or input
+    IF LOWER(@filterType) = 'zone'
+    BEGIN
+        INSERT INTO #branchIds (br_id)
+        SELECT B.IBR_ID
+        FROM PERM_DTL P
+        JOIN BRANCH_MST B ON B.IBR_ID = P.PERMISSION
+        WHERE P.PERM_TYPE = 1004
+          AND (
+              (LOWER(@zone_name) = 'pnp' AND P.IUSERID = 1747) OR
+              (LOWER(@zone_name) = 'srp' AND P.IUSERID = 1052) OR
+              (LOWER(@zone_name) = 'btb' AND P.IUSERID = 1522)
+          );
+    END
+    ELSE IF LOWER(@filterType) = 'branch'
+    BEGIN
+        INSERT INTO #branchIds (br_id)
+        SELECT TRY_CAST(value AS INT)
+        FROM STRING_SPLIT(@brIds, ',')
+        WHERE ISNUMERIC(value) = 1;
+    END
 
-	WITH StaffRecommend AS (
+	;WITH StaffRecommend AS (
 		SELECT 
 			SUM(
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%co-borrower%' THEN 1 ELSE 0 END
-			) as total_co_borrower,
+			) as total_contact_co_borrower,
 			SUM(
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%guarantor%' THEN 1 ELSE 0 END
-			) as total_guarantor,
+			) as total_contact_guarantor,
+			SUM(
+				CASE WHEN LOWER(L.staff_recommend) LIKE '%letter-ro%' THEN 1 ELSE 0 END
+			) as total_invitation_letter_ro,
 			SUM(
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%weekly follow up%' THEN 1 ELSE 0 END
 			) as total_weekly_follow_up,
@@ -49,24 +72,31 @@ BEGIN
 			) as total_remind_letter,
 			SUM(
 				CASE WHEN LOWER(L.staff_recommend) LIKE '%bm/hlo support%' THEN 1 ELSE 0 END
-			) as total_support
+			) as total_request_bm_hlo_support
 
 		FROM CMLDLQ_loan_overdue L
 		JOIN USER_PROFILE_MST U ON L.iuser_id = U.IUSER_ID
 		WHERE (
+			(
 			--filter by RO name
-			LOWER(@filterType) LIKE '%name%' 
-			AND L.iuser_id = @filter_iuser_id
-		) 
-		OR (
-			--filter by RO name
-			LOWER(@filterType) LIKE '%branch%' 
-		) AND L.branchID IN (SELECT br_id FROM #branchIds) AND U.ROLE_ID = 32
+			LOWER(@filterType) LIKE '%recovery team%'
+			AND (
+                L.iuser_id = @filter_iuser_id OR
+                @filter_iuser_id = 0
+            )
+			) 
+			OR (
+				--filter by 'branch', 'zone'
+				LOWER(@filterType) IN ('branch', 'zone') AND 
+				L.branchID IN (SELECT br_id FROM #branchIds) 
+			)
+		) AND U.ROLE_ID = 32
+		AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
 
 	)
 		
 	SELECT *, (
-		total_co_borrower + total_guarantor + total_weekly_follow_up + total_loan_restructure + total_refinancing + total_remind_letter + total_support
+		total_contact_co_borrower + total_contact_guarantor + total_weekly_follow_up + total_loan_restructure + total_refinancing + total_remind_letter + total_request_bm_hlo_support
 	) AS grand_total
 	FROM StaffRecommend;
 

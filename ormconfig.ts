@@ -1,8 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-//load .env file
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const ormconfig: TypeOrmModuleOptions = {
   type: 'mssql',

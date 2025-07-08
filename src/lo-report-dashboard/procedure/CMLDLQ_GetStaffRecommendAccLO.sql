@@ -22,6 +22,7 @@ BEGIN
 			SUM(CASE WHEN LOWER(L.communication_step_taken) LIKE '%request bm/hlo support%' THEN 1 ELSE 0 END) AS total_request_bm_hlo_support
 		FROM CMLDLQ_loan_overdue L
 		WHERE L.iuser_id = @iuser_id
+		AND dbo.fn_CMLDLQ_MonthStatus(L.contact_date) IN ('p', 'c')
 	)
 
 	--Select from CTE with a grand total

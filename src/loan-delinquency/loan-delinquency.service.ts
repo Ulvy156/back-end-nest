@@ -52,7 +52,7 @@ export class LoanDelinquencyService {
   async filterLoanByBranchId(filterLoanQuery: FilterLoanQuery) {
     try {
       // SQL query string with parameters
-      const sql = `EXEC RPT_Loan_Overdue_CHM_2 '${filterLoanQuery.staffId}','${filterLoanQuery.currency}','${filterLoanQuery.branchId}',${filterLoanQuery.saction},'${filterLoanQuery.from_dt}','${filterLoanQuery.to_dt}',${parseInt(filterLoanQuery.day_from)},${parseInt(filterLoanQuery.day_to)},'${filterLoanQuery.acc_id}','${filterLoanQuery.cus_id}','${filterLoanQuery.cus_name}','${filterLoanQuery.LOID}','${filterLoanQuery.village}'`;
+      const sql = `EXEC RPT_Loan_Overdue_CHM_2 '${filterLoanQuery.staffId}','${filterLoanQuery.currency}','${filterLoanQuery.branchId}',${filterLoanQuery.saction},'${filterLoanQuery.from_dt}','${filterLoanQuery.to_dt}',${parseInt(filterLoanQuery.day_from)},${parseInt(filterLoanQuery.day_to)},'${filterLoanQuery.acc_id}','${filterLoanQuery.cus_id}','${filterLoanQuery.cus_name}','${filterLoanQuery.LOID}','${filterLoanQuery.village}', '${filterLoanQuery.acc_status}'`;
 
       // Execute the SQL query
       const result: [] = await this.dataSource.query(sql);
@@ -62,7 +62,7 @@ export class LoanDelinquencyService {
       throw normalizeError(error);
     }
   }
-
+  //filter loan uploaded for LO-LRO
   async filterUploadedLoanOfficer(lonaSavedFilterType: LonaSavedFilterType) {
     try {
       let query = `
@@ -79,8 +79,10 @@ export class LoanDelinquencyService {
                 CUST_MST cm ON cm.CUST_ID = loan.cus_ID
             JOIN 
                 USER_PROFILE_MST U ON U.IUSER_ID = loan.iuser_id
+            JOIN 
+                INST_ACT_MST I ON I.AC_ID = loan.acc_id
             WHERE loan.iuser_id = ${+lonaSavedFilterType.iuser_id}
-          
+            AND I.AC_STA<>'C'
       `;
       let totalLoanQuery = `
         SELECT COUNT(*) as total_loan FROM CMLDLQ_loan_overdue loan
@@ -249,13 +251,15 @@ export class LoanDelinquencyService {
               CUST_MST cm ON cm.CUST_ID = loan.cus_ID
           JOIN 
               USER_PROFILE_MST U ON U.IUSER_ID = loan.iuser_id
+          JOIN 
+              INST_ACT_MST I ON I.AC_ID = loan.acc_id
           WHERE 
               loan.branchID IN (
               SELECT PERMISSION
                       FROM PERM_DTL
                       WHERE PERM_TYPE = 1004
                   AND IUSERID = ${+lonaSavedFilterType.iuser_id}
-            )
+            ) AND I.AC_STA<>'C'
         `;
       let totalLoanQuery = `
         SELECT COUNT(*) as total_loan FROM CMLDLQ_loan_overdue loan
