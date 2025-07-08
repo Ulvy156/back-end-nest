@@ -13,7 +13,7 @@ export class BranchReportDashboardService {
 
   async getColltectedAccBranch(filterData: CollectedAccFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAccBranch '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAccBM '${filterData.filterType}','${filterData.inputValue}',${filterData.br_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {
@@ -23,7 +23,7 @@ export class BranchReportDashboardService {
 
   async getColltectedAmtBranch(filterData: CollectedAccFilter): Promise<any> {
     try {
-      const sql = `EXEC CMLDLQ_GetCollectedAmtBranch '${filterData.filterType}','${filterData.inputValue}',${filterData.iuser_id}`;
+      const sql = `EXEC CMLDLQ_GetCollectedAmtBM '${filterData.filterType}','${filterData.inputValue}',${filterData.br_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
       return result;
     } catch (error) {

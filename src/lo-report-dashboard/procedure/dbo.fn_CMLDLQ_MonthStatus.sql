@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER   FUNCTION [dbo].[fn_CMLDLQ_MonthStatus]
+CREATE OR ALTER   FUNCTION [dbo].[fn_CMLDLQ_MonthStatus]
 (
     @inputDate DATETIME
 )

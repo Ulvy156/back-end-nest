@@ -49,4 +49,5 @@ export interface FilterLoanQuery {
   cus_name: string;
   LOID: string;
   village: string;
+  acc_status: string;
 }

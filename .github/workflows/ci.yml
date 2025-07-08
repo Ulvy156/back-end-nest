@@ -1,50 +1,48 @@
-name: CI Pipeline
+name: CodeQL Security Scan
 
 on:
-  pull_request:
-    branches:
-      - dev
   push:
     branches:
-      - dev
-      - master
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: '0 0 * * 0'  # every Sunday
 
 jobs:
-  build-and-test:
+  analyze:
+    name: Analyze with CodeQL
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript, typescript]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 20
+          cache: 'npm'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Run Lint
-        run: npm run lint
-
-      - name: Run Tests
-        run: npm test
-
-  auto-merge-to-dev:
-    needs: build-and-test
-    if: github.event.pull_request.base.ref == 'dev'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-
-    steps:
-      - name: Enable auto-merge for PR to dev
-        uses: peter-evans/enable-pull-request-automerge@v3
+      - name: 📥 Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash
+          languages: ${{ matrix.language }}
+
+      - name: 🛠️ Build app (required for analysis)
+        run: npm run build
+
+      - name: 🔍 Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
