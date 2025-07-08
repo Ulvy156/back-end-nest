@@ -1,12 +1,12 @@
 USE [CML_Pilot]
 GO
-/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectionParBucketROTeam]    Script Date: 23-Jun-25 1:54:12 PM ******/
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectionParBucketCMP]    Script Date: 08-Jul-25 11:02:04 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketCMP]
+ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectionParBucketCMP]
     @filterType VARCHAR(200) = NULL, -- branch, all lro
     @brIds VARCHAR(200) = NULL, -- format must be '1,2,3'
     @zone_name VARCHAR(10) = NULL,       -- 'pnp', 'srp', 'btb'
@@ -82,6 +82,13 @@ BEGIN
                         AND (
                             L.iuser_id = @filter_iuser_id OR
                             @filter_iuser_id = 0 AND  U.ROLE_ID = 32
+                        )
+                ) OR
+                (
+                    --filter by staff
+                    LOWER(@filterType) LIKE '%staff%'
+                        AND (
+                            L.iuser_id = @filter_iuser_id
                         )
                 )
                 OR (

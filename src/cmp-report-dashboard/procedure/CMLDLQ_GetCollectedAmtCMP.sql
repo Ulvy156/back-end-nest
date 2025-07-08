@@ -1,11 +1,12 @@
 USE [CML_Pilot]
 GO
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAmtCMP]    Script Date: 08-Jul-25 11:00:45 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE OR ALTER PROCEDURE [dbo].[CMLDLQ_GetCollectedAmtCMP]
+ALTER   PROCEDURE [dbo].[CMLDLQ_GetCollectedAmtCMP]
     @filterType VARCHAR(200) = NULL, -- 'branch', 'zone', 'recovery team'
     @brIds VARCHAR(200) = NULL, -- format: '1,2,3'
     @zone_name VARCHAR(10) = NULL, -- 'pnp', 'srp', 'btb'
@@ -72,7 +73,14 @@ BEGIN
 			(
 				LOWER(@filterType) LIKE '%recovery team%' AND ROLE_ID = 32 AND
 				(@filter_iuser_id = 0 OR L.iuser_id = @filter_iuser_id)
-			)
+			) OR
+            (
+                --filter by staff
+                LOWER(@filterType) LIKE '%staff%'
+                    AND (
+                        L.iuser_id = @filter_iuser_id
+                    )
+            )
 			OR (
 				LOWER(@filterType) IN ('branch', 'zone') AND
 				branchID IN (SELECT br_id FROM #branchIds)
@@ -86,16 +94,16 @@ BEGIN
         ZoneName,
 
         -- Previous
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p0days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p1_29days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p30_59days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p60_plus_days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p0days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p1_29days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p30_59days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS p60_plus_days,
 
         -- Current
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c0days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c1_29days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c30_59days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(created_at) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c60_plusdays
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c0days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c1_29days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c30_59days,
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN Balance_Amt ELSE 0 END) AS c60_plusdays
 
     FROM ZoneLabeled
     
