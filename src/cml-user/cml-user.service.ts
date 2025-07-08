@@ -201,6 +201,16 @@ export class CmlUserService {
     }
   }
 
+  async filterUserByName(name: string) {
+    try {
+      const query = `SELECT IUSER_ID, NAME FROM USER_PROFILE_MST WHERE LOWER(NAME) LIKE '%${name}%'`;
+      const userLists: Record<string, any> = await this.dataSource.query(query);
+      return { userLists };
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
+
   async adminFilterUsers(
     @Query() filterTypeLOLRO: FilterTypeLOLRO,
   ): Promise<any> {

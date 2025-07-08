@@ -1,6 +1,6 @@
 USE [CML_Pilot]
 GO
-/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAccCMP]    Script Date: 08-Jul-25 11:00:11 AM ******/
+/****** Object:  StoredProcedure [dbo].[CMLDLQ_GetCollectedAccCMP]    Script Date: 08-Jul-25 3:10:36 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -103,7 +103,20 @@ BEGIN
         SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c0days,
         SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) AS c1_29days,
         SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) AS c30_59days,
-        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c60_plusdays
+        SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) AS c60_plusdays,
+		
+		--Total overdue account
+		(
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'p' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(0, 0, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(1, 29, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(30, 59, Par_Category) = 1 THEN 1 ELSE 0 END) +
+			SUM(CASE WHEN dbo.fn_CMLDLQ_MonthStatus(contact_date) = 'c' AND dbo.fn_CMLDLQ_IsInRangePAR(60, 0, Par_Category) = 1 THEN 1 ELSE 0 END)
+		) AS total_contact_account
+
 
     FROM ZoneLabeled
     

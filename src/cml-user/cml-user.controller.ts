@@ -40,6 +40,11 @@ export class CmlUserController {
     return await this.cmlUserService.getLOLROByIuserId(filterTypeLOLRO);
   }
 
+  @Get('/users/:name')
+  async filterUserByName(@Param('name') name: string): Promise<any> {
+    return await this.cmlUserService.filterUserByName(name);
+  }
+
   @Get('/admin-filter/users')
   async adminFilterUsers(
     @Query() filterTypeLOLRO: FilterTypeLOLRO,
