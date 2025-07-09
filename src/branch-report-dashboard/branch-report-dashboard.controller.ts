@@ -18,19 +18,19 @@ export class BranchReportDashboardController {
   }
 
   @Get('/collected-account')
-  async getColltectedAccBranch(
+  async getCollectedAccBranch(
     @Query() filterData: CollectedAccFilter,
   ): Promise<any> {
-    return await this.branchReportDashboardService.getColltectedAccBranch(
+    return await this.branchReportDashboardService.getCollectedAccBranch(
       filterData,
     );
   }
 
   @Get('/collected-amount')
-  async getColltectedAmtBranch(
+  async getCollectedAmtBranch(
     @Query() filterData: CollectedAccFilter,
   ): Promise<any> {
-    return await this.branchReportDashboardService.getColltectedAmtBranch(
+    return await this.branchReportDashboardService.getCollectedAmtBranch(
       filterData,
     );
   }

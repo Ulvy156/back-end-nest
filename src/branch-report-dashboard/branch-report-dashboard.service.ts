@@ -11,7 +11,7 @@ export class BranchReportDashboardService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async getColltectedAccBranch(filterData: CollectedAccFilter): Promise<any> {
+  async getCollectedAccBranch(filterData: CollectedAccFilter): Promise<any> {
     try {
       const sql = `EXEC CMLDLQ_GetCollectedAccBM '${filterData.filterType}','${filterData.inputValue}',${filterData.br_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
@@ -21,7 +21,7 @@ export class BranchReportDashboardService {
     }
   }
 
-  async getColltectedAmtBranch(filterData: CollectedAccFilter): Promise<any> {
+  async getCollectedAmtBranch(filterData: CollectedAccFilter): Promise<any> {
     try {
       const sql = `EXEC CMLDLQ_GetCollectedAmtBM '${filterData.filterType}','${filterData.inputValue}',${filterData.br_id}`;
       const result: Record<string, any>[] = await this.dataSource.query(sql);
