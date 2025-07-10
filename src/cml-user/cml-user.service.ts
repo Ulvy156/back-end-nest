@@ -155,6 +155,7 @@ export class CmlUserService {
       let totalUsersQuery = `
         SELECT COUNT(*) AS total_users
         FROM USER_PROFILE_MST P 
+        INNER JOIN EMP_MST E ON E.STAFF_ID = P.EMP_NO
         WHERE P.IBR_ID IN (
               SELECT PERMISSION
                   FROM PERM_DTL
@@ -174,7 +175,7 @@ export class CmlUserService {
       }
       if (filterTypeLOLRO.targetUserIdFilter) {
         conditions.push(
-          ` AND P.IUSER_ID = ${filterTypeLOLRO.targetUserIdFilter}`,
+          ` AND P.USER_ID = '${filterTypeLOLRO.targetUserIdFilter}'`,
         );
       }
       if (filterTypeLOLRO.userPosition) {
