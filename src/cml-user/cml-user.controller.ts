@@ -51,4 +51,9 @@ export class CmlUserController {
   ): Promise<any> {
     return await this.cmlUserService.adminFilterUsers(filterTypeLOLRO);
   }
+
+  @Get('/unique-role-id')
+  async getUniqueRoleID(): Promise<any> {
+    return await this.cmlUserService.getUniqueRoleID();
+  }
 }

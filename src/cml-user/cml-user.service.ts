@@ -250,4 +250,14 @@ export class CmlUserService {
       throw normalizeError(error);
     }
   }
+
+  async getUniqueRoleID() {
+    try {
+      const query = 'SELECT DISTINCT ROLE_ID FROM USER_PROFILE_MST';
+      const role_id: number[] = await this.dataSource.query(query);
+      return role_id;
+    } catch (error) {
+      throw normalizeError(error);
+    }
+  }
 }

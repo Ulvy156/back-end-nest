@@ -20,6 +20,8 @@ import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboa
 import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dashboard.module';
 import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-dashboard.module';
+import { UiFeaturesModule } from './ui-features/ui-features.module';
+import { RoleFeaturesAccessModule } from './role_features_access/role_features_access.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-d
     CmpReportDashboardModule,
     LoanOvedueModule,
     ZoneReportDashboardModule,
+    UiFeaturesModule,
+    RoleFeaturesAccessModule,
   ],
 })
 export class AppImportsModule {}
