@@ -1,7 +1,7 @@
 # KIVA BACK-END NEST JS
-
+```base
 A scalable server-side application built using [NestJS](https://nestjs.com/) with TypeScript, TypeORM, and robust developer tooling for CI/CD, linting, formatting, and testing.
-
+```
 ---
 
 ## Table of Contents
@@ -19,7 +19,7 @@ A scalable server-side application built using [NestJS](https://nestjs.com/) wit
 ---
 
 ## Features
-
+```base
 - **NestJS v11**: Modular and scalable Node.js framework.
 - **TypeScript**: Strong typing and modern JS features.
 - **TypeORM**: ORM with support for MSSQL and other databases.
@@ -33,16 +33,16 @@ A scalable server-side application built using [NestJS](https://nestjs.com/) wit
 - **Testing**: Jest, Supertest, E2E config included.
 - **Linting & Formatting**: ESLint and Prettier.
 - **Modern Build Tools**: SWC, ts-node, ts-loader.
-
+```
 ---
 
 ## Requirements
-
+```base
 - Node.js v18+
 - npm v9+ or yarn
 - MS SQL Server (or compatible database for TypeORM)
 - (Optional) Docker for containerized development
-
+```
 ---
 
 ## Installation
