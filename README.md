@@ -18,6 +18,34 @@ A scalable server-side application built using [NestJS](https://nestjs.com/) wit
 
 ---
 
+## Project Structure
+📦src
+ ┣ 📂branch-report-dashboard
+ ┣ 📂cml-user
+ ┣ 📂cmp-report-dashboard
+ ┣ 📂common
+ ┃ ┣ 📂enums
+ ┃ ┗ 📂utils
+ ┣ 📂config
+ ┣ 📂contact-account
+ ┣ 📂hpo-dashboard-report
+ ┣ 📂lo-report-dashboard
+ ┣ 📂loan-delinquency
+ ┣ 📂loan-ovedue
+ ┣ 📂locations
+ ┣ 📂middleware
+ ┣ 📂notifications
+ ┣ 📂Procedure ( main procedure)
+ ┣ 📂recovery-team-dashboard
+ ┣ 📂throttler
+ ┣ 📂view-branch-permission
+ ┣ 📂zone-report-dashboard
+ ┣ 📜app-imports.module.ts
+ ┣ 📜app.controller.ts
+ ┣ 📜app.module.ts
+ ┣ 📜app.service.ts
+ ┗ 📜main.ts
+
 ## Features
 
 - **NestJS v11**: Modular and scalable Node.js framework.
