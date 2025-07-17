@@ -1,7 +1,7 @@
 # KIVA BACK-END NEST JS
-```base
+
 A scalable server-side application built using [NestJS](https://nestjs.com/) with TypeScript, TypeORM, and robust developer tooling for CI/CD, linting, formatting, and testing.
-```
+
 ---
 
 ## Table of Contents
@@ -185,13 +185,13 @@ npm run format
 ---
 
 ## Dependency Policy
-
+```base
 - All `@nestjs/*` packages use the same major version.
 - Use pinned or caret (`^`) versions for stability, but avoid `*` except where absolutely necessary (replace `"@nestjs/mapped-types": "*"` as soon as possible).
 - Update dependencies regularly and review for security issues.
 - Prefer semantic versioning, test thoroughly after major upgrades.
 - Lockfile (`package-lock.json` or `yarn.lock`) must be committed and kept up to date.
-
+```
 ---
 
 ## License
