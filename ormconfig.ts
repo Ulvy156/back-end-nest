@@ -8,7 +8,7 @@ const ormconfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: ['dist/**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../entities/LoanDelinquency.entity.js'],
   synchronize: false,
   autoLoadEntities: true, // Loads all columns dynamically
   logging: true,

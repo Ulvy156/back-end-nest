@@ -4,6 +4,11 @@ import { getServerConfig } from './config/server.config';
 import { setupMiddlewares } from './middleware/app.middleware';
 import { setupPipes } from './config/pipes.config';
 import { getCorsConfig } from './config/cors.config';
+import * as dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

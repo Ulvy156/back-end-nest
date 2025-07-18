@@ -1,28 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateLoanOverdueDto } from './dto/create-loan-overdue.dto';
-import { UpdateLoanOvedueDto } from './dto/update-loan-ovedue.dto';
+import { UpdateLoanOverdueDto } from './dto/update-loan-overdue.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CMLDLQ_loan_overdue } from './entities/loan-ovedue.entity';
+import { LoanOverdue } from './entities/loan-overdue.entity';
+import { CreateLoanOverdueDto } from './dto/create-loan-overdue.dto';
+import { normalizeError } from 'src/common/utils/exception-utils';
 
 @Injectable()
-export class LoanOvedueService {
+export class LoanOverdueService {
   constructor(
-    @InjectRepository(CMLDLQ_loan_overdue)
-    private readonly loanOverdueRepository: Repository<CMLDLQ_loan_overdue>,
+    @InjectRepository(LoanOverdue)
+    private readonly loanOverdueRepository: Repository<LoanOverdue>,
   ) {}
-  async create(
-    createLoanOvedueDto: CreateLoanOverdueDto,
-  ): Promise<CMLDLQ_loan_overdue> {
-    const loanOverdue = this.loanOverdueRepository.create(createLoanOvedueDto);
-    return await this.loanOverdueRepository.save(loanOverdue);
+
+  async create(createLoanOverdueDto: CreateLoanOverdueDto) {
+    try {
+      const loanOverdue =
+        this.loanOverdueRepository.create(createLoanOverdueDto);
+      return await this.loanOverdueRepository.save(loanOverdue);
+    } catch (error) {
+      throw normalizeError(error);
+    }
   }
 
   async findAll() {
     return this.loanOverdueRepository.find();
   }
 
-  async findOne(id: number): Promise<CMLDLQ_loan_overdue> {
+  async findOne(id: number): Promise<LoanOverdue> {
     const loanOverdue = await this.loanOverdueRepository.findOne({
       where: { id },
     });
@@ -32,7 +37,7 @@ export class LoanOvedueService {
     return loanOverdue;
   }
 
-  async update(id: number, updateLoanOvedueDto: UpdateLoanOvedueDto) {
+  async update(id: number, updateLoanOvedueDto: UpdateLoanOverdueDto) {
     const loanOverdue = await this.findOne(+id);
     if (!loanOverdue) {
       throw new NotFoundException(`LoanOverdue with ID ${id} not found`);

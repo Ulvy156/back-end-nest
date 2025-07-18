@@ -51,3 +51,54 @@ export interface FilterLoanQuery {
   village: string;
   acc_status: string;
 }
+
+export interface LoanOverdue {
+  id: number;
+  iuser_id: number;
+  contact_tool: string;
+  contact_date: string;
+  staff_invole: string;
+  met_who: string;
+  income_existence: string;
+  net_income: number;
+  current_repay_ratio: number;
+  isPay_thisMonth: string;
+  promise_date: string;
+  promise_amt: number;
+  estimate_willingness: string;
+  partner_type_default: string;
+  reason_overdue: string;
+  communication_step_taken: string;
+  support_from_guarantor: string;
+  loan_with_collateral: string;
+  have_recheck: string;
+  reason_not_recheck?: string | null;
+  status_collateral: string;
+  outstanding_loan: string;
+  remark_propose_solution: string;
+  staff_recommend: string;
+  timeline_next_step: string;
+  phone_number: string;
+  acc_id: string;
+  branchID: number;
+  currency: string;
+  cus_ID: string;
+  Balance_Amt: number;
+  Maturity_Date: string;
+  Last_Payment_Date: string;
+  Last_Payment_Amt: number;
+  Loan_Age: number;
+  Par_Category: string;
+  Total_Overdue_Amt: number;
+  Overdue_Principal: number;
+  Overdue_Interest: number;
+  Overdue_Monitoring_Fee: number;
+  monthly_payment: number;
+  Penalty: number;
+  created_at: string;
+  updated_at: string;
+  created_by_iuserid?: number | null;
+  updated_by_iuserid?: number | null;
+  actions?: string | null;
+  status_update?: string | null;
+}

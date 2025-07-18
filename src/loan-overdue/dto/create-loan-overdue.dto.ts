@@ -1,7 +1,7 @@
 import { IsString, IsOptional, IsNumber, IsDate, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class CreateLoanDelinquencyDto {
+export class CreateLoanOverdueDto {
   @IsInt()
   iuser_id: number;
 
@@ -145,9 +145,11 @@ export class CreateLoanDelinquencyDto {
   @IsNumber()
   Penalty: number;
 
+  @IsOptional()
   @IsInt()
   created_by_iuserid: number;
 
+  @IsOptional()
   @IsInt()
   updated_by_iuserid: number;
 
@@ -155,6 +157,7 @@ export class CreateLoanDelinquencyDto {
   @IsString()
   actions?: string;
 
+  @IsOptional()
   @IsString()
   status_update: string;
 

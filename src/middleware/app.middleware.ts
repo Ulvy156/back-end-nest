@@ -10,6 +10,10 @@ export function setupMiddlewares(app: INestApplication) {
   );
 
   app.use(cookieParser());
+  app.use((req: express.Request, res, next: express.NextFunction) => {
+    console.log(`Request: ${req.method} ${req.url}`);
+    next();
+  });
 
   app.useLogger(['log', 'warn', 'error']);
 }

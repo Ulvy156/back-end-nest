@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('CMLDLQ_loan_overdue')
-export class LoanDelinquency {
+export class LoanOverdue {
   @PrimaryGeneratedColumn()
   id: number;
 

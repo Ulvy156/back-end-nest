@@ -1,0 +1,15 @@
+{
+  "loan_overdue_id": 12,
+  "total_business_expense": 1000000,
+  "total_household_expense": 800000,
+  "business_expenses": [
+    { "expense_items": "Other", "amt_expense": 1000000 }
+  ],
+  "household_expenses": [
+    {
+      "expense_items": "Other",
+      "expense_item_name": "ប្រើប្រាស់ផ្សេង",
+      "amt_expense": 800000
+    }
+  ]
+}

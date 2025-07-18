@@ -18,8 +18,9 @@ import { RecoveryTeamDashboardModule } from './recovery-team-dashboard/recovery-
 import { HpoDashboardReportModule } from './hpo-dashboard-report/hpo-dashboard-report.module';
 import { LoReportDashboardModule } from './lo-report-dashboard/lo-report-dashboard.module';
 import { CmpReportDashboardModule } from './cmp-report-dashboard/cmp-report-dashboard.module';
-import { LoanOvedueModule } from './loan-ovedue/loan-ovedue.module';
 import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-dashboard.module';
+import { LoanOverdueModule } from './loan-overdue/loan-overdue.module';
+import { GrossExpenseModule } from './gross-expense/gross-expense.module';
 
 @Module({
   imports: [
@@ -39,8 +40,9 @@ import { ZoneReportDashboardModule } from './zone-report-dashboard/zone-report-d
     HpoDashboardReportModule,
     LoReportDashboardModule,
     CmpReportDashboardModule,
-    LoanOvedueModule,
     ZoneReportDashboardModule,
+    LoanOverdueModule,
+    GrossExpenseModule,
   ],
 })
 export class AppImportsModule {}

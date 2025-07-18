@@ -65,3 +65,6 @@ BEGIN
     GROUP BY U.IUSER_ID, U.NAME
 
 END
+
+
+SELECT * FROM CMLDLQ_loan_overdue WHERE id = 27574
